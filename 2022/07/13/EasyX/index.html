@@ -30,9 +30,10 @@
 <meta property="og:description" content="​	偶然在B站刷到了EasyX的教程，想了想我现在写C++确实全都是小黑框，于是快马加鞭的开始进行EasyX的学习，同时准备下一步学学QT（咕咕咕） ​	部分教程跟随B站@C语言Plus 视频链接 ​	部分引用EasyX官方说明文档 在线文档链接">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-13T11:56:40.000Z">
-<meta property="article:modified_time" content="2022-07-13T16:26:56.510Z">
+<meta property="article:modified_time" content="2022-07-16T03:44:38.460Z">
 <meta property="article:author" content="Lymone">
 <meta property="article:tag" content="C++">
+<meta property="article:tag" content="EasyX">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://example.com/2022/07/13/EasyX/">
@@ -199,7 +200,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-07-14 00:26:56" itemprop="dateModified" datetime="2022-07-14T00:26:56+08:00">2022-07-14</time>
+                <time title="修改时间：2022-07-16 11:44:38" itemprop="dateModified" datetime="2022-07-16T11:44:38+08:00">2022-07-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -481,7 +482,148 @@
 <li>AND &#x2F; OR &#x2F; NOT &#x2F; XOR 为布尔运算。 </li>
 <li>“当前填充颜色”是指通过 setfillcolor 设置的用于当前填充的颜色。</li>
 </ol>
-<h2 id="五、鼠标消息函数（新版）"><a href="#五、鼠标消息函数（新版）" class="headerlink" title="五、鼠标消息函数（新版）"></a>五、鼠标消息函数（新版）</h2><h2 id="六、键盘消息函数"><a href="#六、键盘消息函数" class="headerlink" title="六、键盘消息函数"></a>六、键盘消息函数</h2><h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-源文件问题"><a href="#1-源文件问题" class="headerlink" title="1.源文件问题"></a>1.源文件问题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal error C1189: #error :  EasyX is only for C++</span><br></pre></td></tr></table></figure>
+<h2 id="五、消息处理函数（新版）"><a href="#五、消息处理函数（新版）" class="headerlink" title="五、消息处理函数（新版）"></a>五、消息处理函数（新版）</h2><p>消息缓冲区可以缓冲 <strong>63 个</strong>未处理的消息。每次获取消息时，将从消息缓冲区取出一个最早发生的消息。消息缓冲区满了之后，不再接收任何消息。</p>
+<p>相关函数如下：</p>
+<table>
+<thead>
+<tr>
+<th>函数或数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="ExMessage.htm">ExMessage</a></td>
+<td>消息结构体。</td>
+</tr>
+<tr>
+<td><a href="flushmessage.htm">flushmessage</a></td>
+<td>清空消息缓冲区。</td>
+</tr>
+<tr>
+<td><a href="getmessage.htm">getmessage</a></td>
+<td>获取一个消息。如果当前消息缓冲区中没有，就一直等待。</td>
+</tr>
+<tr>
+<td><a href="peekmessage.htm">peekmessage</a></td>
+<td>获取一个消息，并立即返回。</td>
+</tr>
+</tbody></table>
+<h1 id="ExMessage"><a href="#ExMessage" class="headerlink" title="ExMessage"></a>ExMessage</h1><p>这个结构体用于保存鼠标消息，定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">ExMessage</span></span><br><span class="line">&#123;</span><br><span class="line">	USHORT message;					<span class="comment">// 消息标识</span></span><br><span class="line">	<span class="keyword">union</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 鼠标消息的数据</span></span><br><span class="line">		<span class="keyword">struct</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">bool</span> ctrl		:<span class="number">1</span>;		<span class="comment">// Ctrl 键是否按下</span></span><br><span class="line">			<span class="type">bool</span> shift		:<span class="number">1</span>;		<span class="comment">// Shift 键是否按下</span></span><br><span class="line">			<span class="type">bool</span> lbutton	:<span class="number">1</span>;		<span class="comment">// 鼠标左键是否按下</span></span><br><span class="line">			<span class="type">bool</span> mbutton	:<span class="number">1</span>;		<span class="comment">// 鼠标中键是否按下</span></span><br><span class="line">			<span class="type">bool</span> rbutton	:<span class="number">1</span>;		<span class="comment">// 鼠标右键</span></span><br><span class="line">			<span class="type">short</span> x;				<span class="comment">// 鼠标的 x 坐标</span></span><br><span class="line">			<span class="type">short</span> y;				<span class="comment">// 鼠标的 y 坐标</span></span><br><span class="line">			<span class="type">short</span> wheel;			<span class="comment">// 鼠标滚轮滚动值，为 120 的倍数</span></span><br><span class="line">		&#125;;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 按键消息的数据</span></span><br><span class="line">		<span class="keyword">struct</span></span><br><span class="line">		&#123;</span><br><span class="line">			BYTE vkcode;			<span class="comment">// 按键的虚拟键码</span></span><br><span class="line">			BYTE scancode;			<span class="comment">// 按键的扫描码（依赖于 OEM）</span></span><br><span class="line">			<span class="type">bool</span> extended	:<span class="number">1</span>;		<span class="comment">// 按键是否是扩展键</span></span><br><span class="line">			<span class="type">bool</span> prevdown	:<span class="number">1</span>;		<span class="comment">// 按键的前一个状态是否按下</span></span><br><span class="line">		&#125;;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 字符消息的数据</span></span><br><span class="line">		TCHAR ch;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 窗口消息的数据</span></span><br><span class="line">		<span class="keyword">struct</span></span><br><span class="line">		&#123;</span><br><span class="line">			WPARAM wParam;</span><br><span class="line">			LPARAM lParam;</span><br><span class="line">		&#125;;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="成员"><a href="#成员" class="headerlink" title="成员"></a>成员</h2><p>message</p>
+<p>消息标识，可为以下值：</p>
+<table>
+<thead>
+<tr>
+<th>消息标识</th>
+<th>消息类别</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>WM_MOUSEMOVE</td>
+<td>EM_MOUSE</td>
+<td>鼠标移动消息。</td>
+</tr>
+<tr>
+<td>WM_MOUSEWHEEL</td>
+<td>鼠标滚轮拨动消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_LBUTTONDOWN</td>
+<td>左键按下消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_LBUTTONUP</td>
+<td>左键弹起消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_LBUTTONDBLCLK</td>
+<td>左键双击消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_MBUTTONDOWN</td>
+<td>中键按下消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_MBUTTONUP</td>
+<td>中键弹起消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_MBUTTONDBLCLK</td>
+<td>中键双击消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_RBUTTONDOWN</td>
+<td>右键按下消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_RBUTTONUP</td>
+<td>右键弹起消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_RBUTTONDBLCLK</td>
+<td>右键双击消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_KEYDOWN</td>
+<td>EM_KEY</td>
+<td>按键按下消息</td>
+</tr>
+<tr>
+<td>WM_KEYUP</td>
+<td>按键弹起消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_CHAR</td>
+<td>EM_CHAR</td>
+<td>字符消息。</td>
+</tr>
+<tr>
+<td>WM_ACTIVATE</td>
+<td>EM_WINDOW</td>
+<td>窗口激活状态改变消息。</td>
+</tr>
+<tr>
+<td>WM_MOVE</td>
+<td>窗口移动消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>WM_SIZE</td>
+<td>窗口大小改变消息。</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>ctrl：Ctrl 键是否按下。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>shift：Shift 键是否按下。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>lbutton：鼠标左键是否按下。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>mbutton：鼠标中键是否按下。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>rbutton：鼠标右键是否按下。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>x：当前鼠标 x 坐标（物理坐标）。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>y：当前鼠标 y 坐标（物理坐标）。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>wheel：鼠标滚轮滚动值，为 120 的倍数。仅当消息所属类别为 EM_MOUSE 时有效。</p>
+<p>vkcode：按键的虚拟键码。仅当消息所属类别为 EM_KEY 时有效。</p>
+<p>在微软网站上列出有所有的虚拟键码：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/windows/win32/inputdev/virtual-key-codes">https://docs.microsoft.com/windows/win32/inputdev/virtual-key-codes</a></p>
+<p>scancode：按键的扫描码（依赖于 OEM）。仅当消息所属类别为 EM_KEY 时有效。</p>
+<p>extended：按键是否为扩展按键，例如功能键和数字键盘。仅当消息所属类别为 EM_KEY 时有效。</p>
+<p>prevdown：按键的前一个状态是否为按下。仅当消息所属类别为 EM_KEY 时有效。</p>
+<p>ch：收到的字符。仅当消息所属类别为 EM_CHAR 时有效。</p>
+<p>wParam：消息对应的 wParam 参数。仅当消息所属类别为 EM_WINDOW 时有效。</p>
+<p>lParam：消息对应的 lParam 参数。仅当消息所属类别为 EM_WINDOW 时有效。</p>
+<h2 id="六、其他函数"><a href="#六、其他函数" class="headerlink" title="六、其他函数"></a>六、其他函数</h2><h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="1-源文件问题"><a href="#1-源文件问题" class="headerlink" title="1.源文件问题"></a>1.源文件问题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal error C1189: #error :  EasyX is only for C++</span><br></pre></td></tr></table></figure>
 
 <p>字面意思EasyX仅适用于C++，源文件应为.cpp而不是.c或者其他</p>
 <h2 id="2-字符集问题"><a href="#2-字符集问题" class="headerlink" title="2.字符集问题"></a>2.字符集问题</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误	C2665	“outtextxy”: 2 个重载中没有一个可以转换所有参数类型	</span><br><span class="line">error C2665: “outtextxy”: 2 个重载中没有一个可以转换所有参数类型</span><br></pre></td></tr></table></figure>
@@ -538,6 +680,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/EasyX/" rel="tag"># EasyX</a>
           </div>
 
         
@@ -549,7 +692,10 @@
     <a href="/2022/07/05/hexo/" rel="prev" title="Hexo的使用">
       <i class="fa fa-chevron-left"></i> Hexo的使用
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/16/cpp01/" rel="next" title="c++进阶学习">
+      c++进阶学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -608,7 +754,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EasyX%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">EasyX是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85EasyX"><span class="nav-number">2.</span> <span class="nav-text">下载安装EasyX</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E4%B8%AD%E9%9C%80%E8%A6%81%E5%8C%85%E5%90%AB%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">源码中需要包含的头文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">一、窗口函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E7%9A%84%E5%9D%90%E6%A0%87%E4%BD%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">窗口的坐标位置描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BB%98%E5%9B%BE%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">初始化绘图窗口函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">返回值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E7%BB%98%E5%9B%BE%E7%AA%97%E5%8F%A3"><span class="nav-number">4.1.3.</span> <span class="nav-text">关闭绘图窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%85%E7%A9%BA%E7%BB%98%E5%9B%BE%E8%AE%BE%E5%A4%87"><span class="nav-number">4.1.4.</span> <span class="nav-text">清空绘图设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BB%98%E5%9B%BE%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">二、绘图函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A1%AB%E5%85%85%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.2.1.</span> <span class="nav-text">填充样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6"><span class="nav-number">4.2.2.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.</span> <span class="nav-text">设置颜色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%A1%AB%E5%85%85%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">设置填充颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%94%BB%E7%BA%BF%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.2.</span> <span class="nav-text">设置画线颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.3.</span> <span class="nav-text">设置背景颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2%E8%A1%A8%E8%BE%BE"><span class="nav-number">4.2.3.4.</span> <span class="nav-text">颜色表达</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-number">4.2.4.</span> <span class="nav-text">细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%9C%86"><span class="nav-number">4.2.4.1.</span> <span class="nav-text">1.圆</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-1"><span class="nav-number">4.2.4.1.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%A4%AD%E5%9C%86"><span class="nav-number">4.2.4.2.</span> <span class="nav-text">2.椭圆</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-2"><span class="nav-number">4.2.4.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%9F%A9%E5%BD%A2"><span class="nav-number">4.2.4.3.</span> <span class="nav-text">3.矩形</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-3"><span class="nav-number">4.2.4.3.1.</span> <span class="nav-text">参数</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6%E5%87%BD%E6%95%B0"><span class="nav-number">4.3.</span> <span class="nav-text">三、文字绘制函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2"><span class="nav-number">4.3.1.</span> <span class="nav-text">设置当前文字颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E6%96%87%E5%AD%97%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.3.2.</span> <span class="nav-text">设置当前文字样式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-4"><span class="nav-number">4.3.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.3.3.</span> <span class="nav-text">设置背景模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-5"><span class="nav-number">4.3.3.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.3.4.</span> <span class="nav-text">在指定位置输出字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AE%9E%E9%99%85%E5%8D%A0%E7%94%A8%E5%A4%A7%E5%B0%8F"><span class="nav-number">4.3.5.</span> <span class="nav-text">获取字符串实际占用大小</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-6"><span class="nav-number">4.3.5.1.</span> <span class="nav-text">参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%9B%BE%E5%83%8F%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.</span> <span class="nav-text">四、图像函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IMAGE"><span class="nav-number">4.4.1.</span> <span class="nav-text">IMAGE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E6%9C%89%E6%88%90%E5%91%98"><span class="nav-number">4.4.1.1.</span> <span class="nav-text">公有成员</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%9B%BE%E5%83%8F"><span class="nav-number">4.4.2.</span> <span class="nav-text">从文件中读取图像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-7"><span class="nav-number">4.4.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%8C%87%E5%AE%9A%E5%9B%BE%E5%83%8F"><span class="nav-number">4.4.3.</span> <span class="nav-text">绘制指定图像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">4.4.3.1.</span> <span class="nav-text">备注</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%BC%A0%E6%A0%87%E6%B6%88%E6%81%AF%E5%87%BD%E6%95%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89"><span class="nav-number">4.5.</span> <span class="nav-text">五、鼠标消息函数（新版）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E9%94%AE%E7%9B%98%E6%B6%88%E6%81%AF%E5%87%BD%E6%95%B0"><span class="nav-number">4.6.</span> <span class="nav-text">六、键盘消息函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%BA%90%E6%96%87%E4%BB%B6%E9%97%AE%E9%A2%98"><span class="nav-number">5.1.</span> <span class="nav-text">1.源文件问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E9%9B%86%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">2.字符集问题</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EasyX%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">EasyX是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85EasyX"><span class="nav-number">2.</span> <span class="nav-text">下载安装EasyX</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E4%B8%AD%E9%9C%80%E8%A6%81%E5%8C%85%E5%90%AB%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">源码中需要包含的头文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">一、窗口函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E7%9A%84%E5%9D%90%E6%A0%87%E4%BD%8D%E7%BD%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">窗口的坐标位置描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BB%98%E5%9B%BE%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">初始化绘图窗口函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">返回值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E7%BB%98%E5%9B%BE%E7%AA%97%E5%8F%A3"><span class="nav-number">4.1.3.</span> <span class="nav-text">关闭绘图窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%85%E7%A9%BA%E7%BB%98%E5%9B%BE%E8%AE%BE%E5%A4%87"><span class="nav-number">4.1.4.</span> <span class="nav-text">清空绘图设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BB%98%E5%9B%BE%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">二、绘图函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A1%AB%E5%85%85%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.2.1.</span> <span class="nav-text">填充样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6"><span class="nav-number">4.2.2.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.</span> <span class="nav-text">设置颜色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%A1%AB%E5%85%85%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">设置填充颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E7%94%BB%E7%BA%BF%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.2.</span> <span class="nav-text">设置画线颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2"><span class="nav-number">4.2.3.3.</span> <span class="nav-text">设置背景颜色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2%E8%A1%A8%E8%BE%BE"><span class="nav-number">4.2.3.4.</span> <span class="nav-text">颜色表达</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%85"><span class="nav-number">4.2.4.</span> <span class="nav-text">细节补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%9C%86"><span class="nav-number">4.2.4.1.</span> <span class="nav-text">1.圆</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-1"><span class="nav-number">4.2.4.1.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%A4%AD%E5%9C%86"><span class="nav-number">4.2.4.2.</span> <span class="nav-text">2.椭圆</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-2"><span class="nav-number">4.2.4.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%9F%A9%E5%BD%A2"><span class="nav-number">4.2.4.3.</span> <span class="nav-text">3.矩形</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-3"><span class="nav-number">4.2.4.3.1.</span> <span class="nav-text">参数</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E5%AD%97%E7%BB%98%E5%88%B6%E5%87%BD%E6%95%B0"><span class="nav-number">4.3.</span> <span class="nav-text">三、文字绘制函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E6%96%87%E5%AD%97%E9%A2%9C%E8%89%B2"><span class="nav-number">4.3.1.</span> <span class="nav-text">设置当前文字颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E6%96%87%E5%AD%97%E6%A0%B7%E5%BC%8F"><span class="nav-number">4.3.2.</span> <span class="nav-text">设置当前文字样式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-4"><span class="nav-number">4.3.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%83%8C%E6%99%AF%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.3.3.</span> <span class="nav-text">设置背景模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-5"><span class="nav-number">4.3.3.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%BD%AE%E8%BE%93%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.3.4.</span> <span class="nav-text">在指定位置输出字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AE%9E%E9%99%85%E5%8D%A0%E7%94%A8%E5%A4%A7%E5%B0%8F"><span class="nav-number">4.3.5.</span> <span class="nav-text">获取字符串实际占用大小</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-6"><span class="nav-number">4.3.5.1.</span> <span class="nav-text">参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%9B%BE%E5%83%8F%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.</span> <span class="nav-text">四、图像函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IMAGE"><span class="nav-number">4.4.1.</span> <span class="nav-text">IMAGE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E6%9C%89%E6%88%90%E5%91%98"><span class="nav-number">4.4.1.1.</span> <span class="nav-text">公有成员</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%9B%BE%E5%83%8F"><span class="nav-number">4.4.2.</span> <span class="nav-text">从文件中读取图像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-7"><span class="nav-number">4.4.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%8C%87%E5%AE%9A%E5%9B%BE%E5%83%8F"><span class="nav-number">4.4.3.</span> <span class="nav-text">绘制指定图像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">4.4.3.1.</span> <span class="nav-text">备注</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0%EF%BC%88%E6%96%B0%E7%89%88%EF%BC%89"><span class="nav-number">4.5.</span> <span class="nav-text">五、消息处理函数（新版）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ExMessage"><span class="nav-number">5.</span> <span class="nav-text">ExMessage</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E5%91%98"><span class="nav-number">5.1.</span> <span class="nav-text">成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">六、其他函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%BA%90%E6%96%87%E4%BB%B6%E9%97%AE%E9%A2%98"><span class="nav-number">6.1.</span> <span class="nav-text">1.源文件问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E9%9B%86%E9%97%AE%E9%A2%98"><span class="nav-number">6.2.</span> <span class="nav-text">2.字符集问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -624,7 +770,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -637,7 +783,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -715,7 +861,7 @@ $(document).ready(function() {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共3.4k字</span>
+  <span class="post-count">博客全站共4.9k字</span>
 </div>
         
 <div class="busuanzi-count">
