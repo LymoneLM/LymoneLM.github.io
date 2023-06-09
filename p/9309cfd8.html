@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/lymone.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.lymone.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为了提高我的编程水平。在一众前辈的指引下，决定做个小项目，在完善项目的过程中逐渐提高自己的水准。 最终决定做个贪吃蛇小游戏吧，规则并不复杂，似乎和我的水平很搭。 本文提及的代码都可以在我(LymoneLM)的github仓库LymoneTest中找到。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++贪吃蛇项目">
+<meta property="og:url" content="http://www.lymone.cc/p/9309cfd8.html">
+<meta property="og:site_name" content="莱蒙黎梦">
+<meta property="og:description" content="为了提高我的编程水平。在一众前辈的指引下，决定做个小项目，在完善项目的过程中逐渐提高自己的水准。 最终决定做个贪吃蛇小游戏吧，规则并不复杂，似乎和我的水平很搭。 本文提及的代码都可以在我(LymoneLM)的github仓库LymoneTest中找到。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.328888.xyz/2022/09/01/kmyTy.png">
+<meta property="article:published_time" content="2022-08-25T02:20:00.000Z">
+<meta property="article:modified_time" content="2023-03-03T13:04:08.331Z">
+<meta property="article:author" content="Lymone">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="EasyX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.328888.xyz/2022/09/01/kmyTy.png">
+
+<link rel="canonical" href="http://www.lymone.cc/p/9309cfd8.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++贪吃蛇项目 | 莱蒙黎梦</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="莱蒙黎梦" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+		<a target="_blank" rel="noopener" href="https://github.com/LymoneLM" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">莱蒙黎梦</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习与思想</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>订阅</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.lymone.cc/p/9309cfd8.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lymone">
+      <meta itemprop="description" content="2023小目标，浅浅的拿个银牌">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="莱蒙黎梦">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++贪吃蛇项目
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-25 10:20:00" itemprop="dateCreated datePublished" datetime="2022-08-25T10:20:00+08:00">2022-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-03 21:04:08" itemprop="dateModified" datetime="2023-03-03T21:04:08+08:00">2023-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa-regular fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为了提高我的编程水平。在一众前辈的指引下，决定做个小项目，在完善项目的过程中逐渐提高自己的水准。</p>
+<p>最终决定做个贪吃蛇小游戏吧，规则并不复杂，似乎和我的水平很搭。</p>
+<p>本文提及的代码都可以在我(LymoneLM)的github仓库LymoneTest中找到。</p>
+<span id="more"></span>
+<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><p>首先敲定了使用的图形库为EasyX（当然主要也是因为目前EasyX也半生不熟）</p>
+<h2 id="浅浅的写写画画"><a href="#浅浅的写写画画" class="headerlink" title="浅浅的写写画画"></a>浅浅的写写画画</h2><p>（Hexo挂图有点麻烦啊）</p>
+<p><img src="https://s1.328888.xyz/2022/09/01/kmyTy.png" alt="OneNote绘制的思维导图"></p>
+<p>打开OneNote，按照过去玩过的游戏，和对游戏工业的简单了解，初步的划分了编程的思路，大体的用已知的知识进行了构思。</p>
+<h2 id="技术验证"><a href="#技术验证" class="headerlink" title="技术验证"></a>技术验证</h2><p>数据部分，地图方面准备使用一个字符型二维数组进行记录，初定大小为20*20。</p>
+<p>蛇身则准备使用一个链队列进行存储，单进单出的蛇身节点和队列非常的相似。</p>
+<h3 id="链队列"><a href="#链队列" class="headerlink" title="链队列"></a>链队列</h3><p>我在数据结构方面的知识基本脱胎于程杰的《大话数据结构》，但是由于这本书主要是在高中的课余时间进行阅读的，所以并没有进行大量的实践，因此也出现了不小的岔子。</p>
+<p>对于链队列，我最早的想法是使用struct结构体</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">sNode</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">char</span> x,y;</span><br><span class="line">	sNode *next;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以下为使用</span></span><br><span class="line">sNode *p=<span class="keyword">new</span> sNode;</span><br></pre></td></tr></table></figure>
+<p>然而这里出现了问题，如果是链队列，肯定需要循环申请内存，然而如果不为p指针释放内存无法再次申请。</p>
+<p>于是我改用了类</p>
+<p>关于链队列的部分可以参看  C++进阶学习 那篇博文的有关内容，这里仅放出最后的结果</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">sNode</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> x, y;</span><br><span class="line">	sNode* snext;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Linkqueue</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//链队列-逆</span></span><br><span class="line">	<span class="comment">//删尾加头 </span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">enQ</span><span class="params">(sNode)</span></span>;</span><br><span class="line">	<span class="function">sNode <span class="title">deQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">destoryQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">printQ</span><span class="params">()</span></span>;<span class="comment">//devOnly </span></span><br><span class="line">	<span class="function"><span class="type">short</span> <span class="title">countQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">pmapQ</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	sNode* front;</span><br><span class="line">	sNode* rear;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>具体的实现参看SnakeData.cpp部分的文件</p>
+<p>实际在实现的过程中参考了部分博文，但是原博文在实现程序的时候先创建了一个链队列类的对象作为链队列，并另外创建了一个对象，专门使用第二个对象的方法对链队列进行操作。</p>
+<p>他的实现代码中所有的方法都含有一个引用传递的参数，传递一个该类的对象。我不知道这样做有什么好处，并且我在逻辑上也看不出这么做的优势，所以我并没有才用这个方法。</p>
+<p>如果您了解我采用的方法的劣势或者明白他的这种实现的优势，恳请您能赐教。</p>
+<h3 id="绘制"><a href="#绘制" class="headerlink" title="绘制"></a>绘制</h3><p>绘制这部分总体来说问题并不大，参照帮助文档一步步的进行实现就好了。栅格绘制和简单图形绘制并没有任何问题，出现问题的是右边的文字绘制，在绘制过程中不断的发生报错，最后了解到这种绘制方式传入的字符串参数必须为TCHAR类型，终于通过改编例程中的代码实现了这个绘制。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawdeath</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0x0000FF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">40</span>, <span class="number">40</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;WASTED\n&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">0</span>, <span class="number">0</span>, <span class="number">699</span>, <span class="number">504</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;WASTED&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawTitle</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0xFFFFFF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">14</span>, <span class="number">14</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">500</span>, <span class="number">10</span>, <span class="number">699</span>, <span class="number">30</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;LymoneSnake&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    r = &#123; <span class="number">500</span>, <span class="number">30</span>, <span class="number">699</span>, <span class="number">50</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;按↑↓←→开始&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">20</span>, <span class="number">20</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    r = &#123; <span class="number">500</span>, <span class="number">50</span>, <span class="number">699</span>, <span class="number">90</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;当前分数：&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawScore</span><span class="params">(<span class="type">int</span> score)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR s[<span class="number">5</span>];</span><br><span class="line">    _stprintf_s(s, _T(<span class="string">&quot;%d&quot;</span>), score);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0xFFFFFF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">30</span>, <span class="number">30</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">500</span>, <span class="number">90</span>, <span class="number">699</span>, <span class="number">140</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(s, &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Minecraft为使用的一个字体，理论上换用其他例如“黑体”是可以正常运行的。</p>
+<h1 id="一些迭代"><a href="#一些迭代" class="headerlink" title="一些迭代"></a>一些迭代</h1><h2 id="画面绘制"><a href="#画面绘制" class="headerlink" title="画面绘制"></a>画面绘制</h2><p>最初的版本中，蛇每次移动后我都会重新绘制整个地图：</p>
+<p>刷新map，绘制栅格，然后绘制蛇体</p>
+<p>显而易见的，这会造成卡顿和频闪</p>
+<p>在意识到这个问题之后我对链队列的实现进行了改进，在删除一个节点的同时返回这个节点的坐标，以此将这个坐标对应的位置画上一个黑色的图形，从而实现缩短蛇体。</p>
+<p>这种方案显然更合适。</p>
+<p>其实在采用这种绘制方式之后，map这个二维字符数组的作用就有点鸡肋了，但是随机苹果和蛇头的功能仍然依赖这个东西，后续我想添加的墙体功能也可能依赖于这个map，所以并没有对其进行彻底删除。</p>
+<h2 id="蛇头"><a href="#蛇头" class="headerlink" title="蛇头"></a>蛇头</h2><p>作为判定的关键，蛇头的坐标显而易见的十分重要，在最初的版本中我使用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="type">int</span> hx, hy</span><br></pre></td></tr></table></figure>
+<p>来存储蛇头的坐标，显然这样做并不直观，所以随后我改用一个sNode对其进行存储。</p>
+<h2 id="退出机制"><a href="#退出机制" class="headerlink" title="退出机制"></a>退出机制</h2><p>其实在任何时候按下ESC是可以退出的，这是在我不断调试的过程中加入的一个功能。完全没有在程序的界面中进行提示。</p>
+<h2 id="主循环中的延迟"><a href="#主循环中的延迟" class="headerlink" title="主循环中的延迟"></a>主循环中的延迟</h2><p>这个是在调试的过程中更改最多的地方</p>
+<p>起初我让检测输入的部分循环多次，后来发现因为消息函数的问题，其实这样做会花费大量的时间，导致等待时间非常的长，后来改为很少次数的输入判断，其实这样是够用的，因为键盘输入会保留在队列中等待处理。</p>
+<p>早期测试中蛇非常难以操作，你必须进行预判才能正常游戏，显然这并不是正常的玩法。经过考量我才发现（真是太傻了），其实在每次蛇移动完之后再加一个延迟，给玩家一个观察的时间，这个问题就能很完美的解决了。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>我不打算提供编译好的程序了（毕竟程序本身和编译并不复杂）</p>
+<p>您可以直接在我的仓库clone源代码或者直接复制下文进行编译即可</p>
+<p>（甚至可以直接改编成单文件进行编译）</p>
+<h2 id="LymoneSnake-cpp"><a href="#LymoneSnake-cpp" class="headerlink" title="LymoneSnake.cpp"></a>LymoneSnake.cpp</h2><p>主程序文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;easyx.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Snake.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> map[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="comment">/*Wall-Head-Apple-Snake*/</span></span><br><span class="line">ExMessage m;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> Nextstep;</span><br><span class="line"><span class="comment">/*Up-Down-Left-Right*/</span></span><br><span class="line"><span class="type">int</span> times = <span class="number">4</span>;</span><br><span class="line"><span class="type">int</span> delay = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> snakelength=<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">initMap</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> xi = <span class="number">0</span>; xi &lt; <span class="number">20</span>; xi++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> yi = <span class="number">0</span>; yi &lt; <span class="number">20</span>; yi++)</span><br><span class="line">        &#123;</span><br><span class="line">            map[xi][yi] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//block 25*25</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testData</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">consolLoaded</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;==ConsolLoaded==\n&quot;</span>);</span><br><span class="line">    <span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG  </span></span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">/*==初始化==*/</span></span><br><span class="line">    <span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">    <span class="built_in">initgraph</span>(<span class="number">700</span>, <span class="number">505</span>, EW_SHOWCONSOLE);</span><br><span class="line">    <span class="built_in">consolLoaded</span>();</span><br><span class="line">    <span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="built_in">initgraph</span>(<span class="number">700</span>, <span class="number">505</span>);</span><br><span class="line">    <span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG</span></span></span><br><span class="line"></span><br><span class="line">    LSD::<span class="built_in">drawNet</span>();</span><br><span class="line">    LSD::<span class="built_in">drawTitle</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="meta">#<span class="keyword">ifdef</span> DEBUG_TESTDATA</span></span><br><span class="line">    <span class="built_in">testData</span>();</span><br><span class="line">    <span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG_TESTDATA</span></span></span><br><span class="line">    LSC::<span class="built_in">initrand</span>();</span><br><span class="line">    LSC::<span class="built_in">randhead</span>();</span><br><span class="line">    LSC::<span class="built_in">randapple</span>();</span><br><span class="line">    LSD::<span class="built_in">drawMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/*开始*/</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//输入检定</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; times; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (LSC::<span class="built_in">directionCheck</span>())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, Nextstep);</span><br><span class="line">            <span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG</span></span></span><br><span class="line">            <span class="built_in">Sleep</span>(<span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG</span></span></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        <span class="comment">//死亡检定</span></span><br><span class="line">        <span class="keyword">if</span> (LSC::<span class="built_in">deathCheck</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            LSD::<span class="built_in">drawdeath</span>();</span><br><span class="line">            m = <span class="built_in">getmessage</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//移动</span></span><br><span class="line">            LSC::<span class="built_in">lengthCheck</span>();</span><br><span class="line">            LSD::<span class="built_in">drawScore</span>(snakelength);</span><br><span class="line">            <span class="comment">//cleardevice();</span></span><br><span class="line">            <span class="comment">//LSD::drawNet();</span></span><br><span class="line">            LSD::<span class="built_in">drawMap</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">Sleep</span>(delay*times);</span><br><span class="line">    &#125;<span class="comment">//main while</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">closegraph</span>();<span class="comment">//关闭绘图窗口</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">testData</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//testdata devonly</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;TestDataLoading\n&quot;</span>);</span><br><span class="line">    map[<span class="number">1</span>][<span class="number">1</span>] = <span class="string">&#x27;W&#x27;</span>;</span><br><span class="line">    map[<span class="number">2</span>][<span class="number">2</span>] = <span class="string">&#x27;S&#x27;</span>;</span><br><span class="line">    map[<span class="number">3</span>][<span class="number">3</span>] = <span class="string">&#x27;W&#x27;</span>;</span><br><span class="line">    map[<span class="number">4</span>][<span class="number">4</span>] = <span class="string">&#x27;S&#x27;</span>;</span><br><span class="line">    map[<span class="number">5</span>][<span class="number">5</span>] = <span class="string">&#x27;W&#x27;</span>;</span><br><span class="line">    map[<span class="number">6</span>][<span class="number">6</span>] = <span class="string">&#x27;S&#x27;</span>;</span><br><span class="line">    map[<span class="number">7</span>][<span class="number">7</span>] = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">    map[<span class="number">8</span>][<span class="number">8</span>] = <span class="string">&#x27;H&#x27;</span>;</span><br><span class="line">    map[<span class="number">9</span>][<span class="number">9</span>] = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">    map[<span class="number">10</span>][<span class="number">10</span>] = <span class="string">&#x27;H&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Snake-h"><a href="#Snake-h" class="headerlink" title="Snake.h"></a>Snake.h</h2><p>头文件，各种声明</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//#define DEBUG</span></span><br><span class="line"><span class="comment">//#define DEBUG_TESTDATA</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SNAKEDRAW_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SNAKEDRAW_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> LSD</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">/*棋盘绘制*/</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">drawNet</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">drawMap</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">cleanmap</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">/*文字绘制*/</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">drawTitle</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">drawScore</span><span class="params">(<span class="type">int</span> score)</span></span>;</span><br><span class="line">	<span class="comment">/*特殊画面*/</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">drawdeath</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SNAKECHECK_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SNAKECHECK_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> LSC</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">/*Random*/</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initrand</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initrand</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">randapple</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">randhead</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">/*Check*/</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initwall</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">directionCheck</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">deathCheck</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">lengthCheck</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SNAKEDATA_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SNAKEDATA_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">sNode</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> x, y;</span><br><span class="line">	sNode* snext;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Linkqueue</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//链队列-逆</span></span><br><span class="line">	<span class="comment">//删尾加头 </span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">enQ</span><span class="params">(sNode)</span></span>;</span><br><span class="line">	<span class="function">sNode <span class="title">deQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">destoryQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">printQ</span><span class="params">()</span></span>;<span class="comment">//devOnly </span></span><br><span class="line">	<span class="function"><span class="type">short</span> <span class="title">countQ</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">pmapQ</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	sNode* front;</span><br><span class="line">	sNode* rear;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="SnakeCheck-cpp"><a href="#SnakeCheck-cpp" class="headerlink" title="SnakeCheck.cpp"></a>SnakeCheck.cpp</h2><p>各种判定的实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Check Frame</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;EasyX.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Snake.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> map[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">extern</span> ExMessage m;</span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> Nextstep;</span><br><span class="line">sNode Head,Rear;</span><br><span class="line"><span class="comment">//extern int Head.x, Head.y;</span></span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> snakelength;</span><br><span class="line">Linkqueue Q;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSC::initwall</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//<span class="doctag">TODO:</span> 墙体检入</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSC::initrand</span><span class="params">(<span class="type">int</span> seed)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">srand</span>(seed);</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSC::initrand</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSC::randapple</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">short</span> xi, yi;</span><br><span class="line">	loop:</span><br><span class="line">	xi = <span class="built_in">rand</span>() % <span class="number">20</span>;</span><br><span class="line">	yi = <span class="built_in">rand</span>() % <span class="number">20</span>;</span><br><span class="line">	<span class="keyword">if</span> (map[xi][yi] == <span class="number">0</span>)</span><br><span class="line">		map[xi][yi] = <span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">goto</span> loop;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSC::randhead</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Q.<span class="built_in">initQ</span>();</span><br><span class="line">	<span class="type">short</span> xi, yi;</span><br><span class="line">loop:</span><br><span class="line">	xi = <span class="built_in">rand</span>() % <span class="number">20</span>;</span><br><span class="line">	yi = <span class="built_in">rand</span>() % <span class="number">20</span>;</span><br><span class="line">	<span class="keyword">if</span> (map[xi][yi] == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		map[xi][yi] = <span class="string">&#x27;H&#x27;</span>;</span><br><span class="line">		Head.x = xi;Head.y = yi;</span><br><span class="line">		Q.<span class="built_in">enQ</span>(Head);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">goto</span> loop;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*键盘输入*/</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">LSC::directionCheck</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">peekmessage</span>(&amp;m, EM_KEY))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">switch</span> (m.message)</span><br><span class="line">		&#123;</span><br><span class="line">		<span class="keyword">case</span> WM_KEYDOWN:</span><br><span class="line">			<span class="keyword">if</span> (m.vkcode == VK_UP)</span><br><span class="line">			&#123;</span><br><span class="line">				Nextstep = <span class="string">&#x27;U&#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (m.vkcode == VK_DOWN)</span><br><span class="line">			&#123;</span><br><span class="line">				Nextstep = <span class="string">&#x27;D&#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (m.vkcode == VK_LEFT)</span><br><span class="line">			&#123;</span><br><span class="line">				Nextstep = <span class="string">&#x27;L&#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (m.vkcode == VK_RIGHT)</span><br><span class="line">			&#123;</span><br><span class="line">				Nextstep = <span class="string">&#x27;R&#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (m.vkcode == VK_ESCAPE)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">LSC::deathCheck</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span> (Nextstep)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;U&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (Head.y - <span class="number">1</span> &lt; <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (map[Head.x][Head.y - <span class="number">1</span>] != <span class="number">0</span>&amp;&amp; map[Head.x][Head.y - <span class="number">1</span>] != <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;D&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (Head.y + <span class="number">1</span> &gt;= <span class="number">20</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (map[Head.x][Head.y + <span class="number">1</span>] != <span class="number">0</span>&amp;&amp; map[Head.x][Head.y + <span class="number">1</span>] != <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;L&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (Head.x - <span class="number">1</span> &lt; <span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (map[Head.x - <span class="number">1</span>][Head.y] != <span class="number">0</span>&amp;&amp; map[Head.x - <span class="number">1</span>][Head.y] != <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;R&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (Head.x + <span class="number">1</span> &gt;= <span class="number">20</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (map[Head.x + <span class="number">1</span>][Head.y] != <span class="number">0</span>&amp;&amp; map[Head.x + <span class="number">1</span>][Head.y] != <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error:UndefinedDeathCheck\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">LSC::lengthCheck</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">bool</span> isA=<span class="literal">false</span>;</span><br><span class="line">	<span class="comment">//苹果检定并移动</span></span><br><span class="line">	<span class="keyword">switch</span> (Nextstep)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;U&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (map[Head.x][--Head.y] == <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			isA = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;D&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (map[Head.x][++Head.y] == <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			isA = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;L&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (map[--Head.x][Head.y] == <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			isA = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&#x27;R&#x27;</span>:</span><br><span class="line">		<span class="keyword">if</span> (map[++Head.x][Head.y] == <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">			isA = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error:UndefinedLengthCheck\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (isA)</span><br><span class="line">	&#123;</span><br><span class="line">		snakelength++;</span><br><span class="line">		LSC::<span class="built_in">randapple</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	Q.<span class="built_in">enQ</span>(Head);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">	<span class="comment">//长度检定</span></span><br><span class="line">	<span class="type">int</span> length = Q.<span class="built_in">countQ</span>();</span><br><span class="line">	<span class="keyword">if</span> (length &gt; snakelength)</span><br><span class="line">	&#123;</span><br><span class="line">		Rear=Q.<span class="built_in">deQ</span>();</span><br><span class="line">		<span class="built_in">setfillcolor</span>(<span class="number">0x000000</span>);</span><br><span class="line">		<span class="built_in">setlinecolor</span>(<span class="number">0x000000</span>);</span><br><span class="line">		<span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d,%d\n&quot;</span>, Rear.x, Rear.y);</span><br><span class="line">		<span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG		</span></span></span><br><span class="line">		<span class="built_in">fillcircle</span>(<span class="number">25</span>*Rear.x + <span class="number">13</span>, <span class="number">25</span>*Rear.y + <span class="number">13</span>, <span class="number">11</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	Q.<span class="built_in">pmapQ</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="SnakeData-cpp"><a href="#SnakeData-cpp" class="headerlink" title="SnakeData.cpp"></a>SnakeData.cpp</h2><p>蛇体数据结构的实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Snake.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> map[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Linkqueue::initQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	sNode* p = <span class="keyword">new</span> sNode;</span><br><span class="line">	front = p;</span><br><span class="line">	rear = p;</span><br><span class="line">	p-&gt;snext = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Linkqueue::enQ</span><span class="params">(sNode node)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	sNode* p = <span class="keyword">new</span> sNode;</span><br><span class="line">	p-&gt;x = node.x;</span><br><span class="line">	p-&gt;y = node.y;</span><br><span class="line">	rear-&gt;snext = p;</span><br><span class="line">	rear = p;</span><br><span class="line">	p-&gt;x = node.x;</span><br><span class="line">	p-&gt;y = node.y;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">sNode <span class="title">Linkqueue::deQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	sNode rearNode;</span><br><span class="line">	<span class="keyword">if</span> (rear == front)</span><br><span class="line">	&#123;</span><br><span class="line">		rearNode.x = <span class="number">-1</span>;</span><br><span class="line">		rearNode.y = <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	sNode* p;</span><br><span class="line">	p = front-&gt;snext;</span><br><span class="line">	front-&gt;snext = p-&gt;snext;</span><br><span class="line">	rearNode.x = p-&gt;x;</span><br><span class="line">	rearNode.y = p-&gt;y;</span><br><span class="line">	<span class="keyword">delete</span> p;</span><br><span class="line">	<span class="keyword">return</span> rearNode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Linkqueue::destoryQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span> (rear != front)</span><br><span class="line">		Linkqueue::<span class="built_in">deQ</span>();</span><br><span class="line">	<span class="keyword">delete</span> front;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Linkqueue::printQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (rear == front)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	sNode* p = front;</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		p = p-&gt;snext;</span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; &quot;X=&quot; &lt;&lt; p-&gt;x &lt;&lt; &quot;Y=&quot; &lt;&lt; p-&gt;y &lt;&lt; std::endl;</span></span><br><span class="line">	&#125; <span class="keyword">while</span> (p != rear);</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">short</span> <span class="title">Linkqueue::countQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (rear == front)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="type">short</span> num = <span class="number">0</span>;</span><br><span class="line">	sNode* p = front;</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		p = p-&gt;snext;</span><br><span class="line">		++num;</span><br><span class="line">	&#125; <span class="keyword">while</span> (p != rear);</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Linkqueue::pmapQ</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (rear == front)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	LSD::<span class="built_in">cleanmap</span>();</span><br><span class="line">	sNode* p = front;</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		p = p-&gt;snext;</span><br><span class="line">		map[p-&gt;x][p-&gt;y] = <span class="string">&#x27;S&#x27;</span>;</span><br><span class="line">	&#125; <span class="keyword">while</span> (p != rear);</span><br><span class="line">	map[p-&gt;x][p-&gt;y] = <span class="string">&#x27;H&#x27;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="SnakeDraw-cpp"><a href="#SnakeDraw-cpp" class="headerlink" title="SnakeDraw.cpp"></a>SnakeDraw.cpp</h2><p>绘制部分</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Draw Frame</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;easyx.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Snake.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span> map[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawNet</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;PrintNet\n&quot;</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">setlinecolor</span>(<span class="number">0xFFFFFF</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">20</span>; i++)</span><br><span class="line">        <span class="built_in">line</span>(<span class="number">25</span> * i, <span class="number">0</span>, <span class="number">25</span> * i, <span class="number">500</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">20</span>; i++)</span><br><span class="line">        <span class="built_in">line</span>(<span class="number">0</span>, <span class="number">25</span> * i, <span class="number">500</span>, <span class="number">25</span> * i);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawMap</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> DEBUG</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;PrintMap\n&quot;</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// DEBUG</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> xi = <span class="number">0</span>; xi &lt; <span class="number">20</span>; xi++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> yi = <span class="number">0</span>; yi &lt; <span class="number">20</span>; yi++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">short</span> x = <span class="number">25</span> * xi, y = <span class="number">25</span> * yi;</span><br><span class="line">            <span class="keyword">switch</span> (map[xi][yi])</span><br><span class="line">            &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;w&#x27;</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;W&#x27;</span>:</span><br><span class="line">                <span class="built_in">setfillcolor</span>(<span class="number">0x2a2aa5</span>);</span><br><span class="line">                <span class="built_in">setlinecolor</span>(<span class="number">0x2a2aa5</span>);</span><br><span class="line">                <span class="built_in">fillrectangle</span>(x + <span class="number">1</span>, y + <span class="number">1</span>, x + <span class="number">24</span>, y + <span class="number">24</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;H&#x27;</span>:</span><br><span class="line">                <span class="built_in">setfillcolor</span>(<span class="number">0x0000ff</span>);</span><br><span class="line">                <span class="built_in">setlinecolor</span>(<span class="number">0x0000ff</span>);</span><br><span class="line">                <span class="built_in">fillcircle</span>(x + <span class="number">13</span>, y + <span class="number">13</span>, <span class="number">11</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>:</span><br><span class="line">                <span class="built_in">setfillcolor</span>(<span class="number">0xffffff</span>);</span><br><span class="line">                <span class="built_in">setlinecolor</span>(<span class="number">0xffffff</span>);</span><br><span class="line">                <span class="built_in">fillcircle</span>(x + <span class="number">13</span>, y + <span class="number">13</span>, <span class="number">11</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;a&#x27;</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;A&#x27;</span>:</span><br><span class="line">                <span class="built_in">setfillcolor</span>(<span class="number">0x6600aa</span>);</span><br><span class="line">                <span class="built_in">setlinecolor</span>(<span class="number">0x00ff00</span>);</span><br><span class="line">                <span class="built_in">fillcircle</span>(x + <span class="number">13</span>, y + <span class="number">13</span>, <span class="number">11</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//cleardevice();//清空绘版</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::cleanmap</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> xi = <span class="number">0</span>; xi &lt; <span class="number">20</span>; xi++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> yi = <span class="number">0</span>; yi &lt; <span class="number">20</span>; yi++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (map[xi][yi] == <span class="string">&#x27;S&#x27;</span>)</span><br><span class="line">                map[xi][yi] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span> (map[xi][yi] == <span class="string">&#x27;H&#x27;</span>)</span><br><span class="line">                map[xi][yi] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawdeath</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0x0000FF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">40</span>, <span class="number">40</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;WASTED\n&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">0</span>, <span class="number">0</span>, <span class="number">699</span>, <span class="number">504</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;WASTED&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawTitle</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0xFFFFFF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">14</span>, <span class="number">14</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">500</span>, <span class="number">10</span>, <span class="number">699</span>, <span class="number">30</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;LymoneSnake&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    r = &#123; <span class="number">500</span>, <span class="number">30</span>, <span class="number">699</span>, <span class="number">50</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;按↑↓←→开始&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">20</span>, <span class="number">20</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    r = &#123; <span class="number">500</span>, <span class="number">50</span>, <span class="number">699</span>, <span class="number">90</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(_T(<span class="string">&quot;当前分数：&quot;</span>), &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">LSD::drawScore</span><span class="params">(<span class="type">int</span> score)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TCHAR s[<span class="number">5</span>];</span><br><span class="line">    _stprintf_s(s, _T(<span class="string">&quot;%d&quot;</span>), score);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">settextcolor</span>(<span class="number">0xFFFFFF</span>);</span><br><span class="line">    <span class="built_in">settextstyle</span>(<span class="number">30</span>, <span class="number">30</span>, <span class="string">L&quot;Minecraft&quot;</span>);</span><br><span class="line">    RECT r = &#123; <span class="number">500</span>, <span class="number">90</span>, <span class="number">699</span>, <span class="number">140</span> &#125;;</span><br><span class="line">    <span class="built_in">drawtext</span>(s, &amp;r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h1><p>其实这个东西在好久之前（大概半个月？）就已经实现了，在我的预想中，我想给它加入更好的UI，选关系统，内置地图，随机种子选择，Level选择，蛇的速度逐渐增加等等各种功能。</p>
+<p>显而易见，到现在我并没有实现它。接下来可能会更忙，可能也没有时间去完成这件事了，所以说就先写完这篇搁置已久的博文吧。</p>
+<p>如果有后续我可能会新开一篇博文，而不是对这篇博文进行重新编辑了。</p>
+<p>不知道您是因为什么原因看到我这篇博文，虽然我确实写的很烂，但还是希望能对您产生一些帮助。</p>
+
+    </div>
+
+    
+    
+    
+
+		
+			<div>
+				<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+			</div>
+		
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Lymone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.lymone.cc/p/9309cfd8.html" title="C++贪吃蛇项目">http://www.lymone.cc/p/9309cfd8.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/156896909">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
+
+            <span class="label">Bilibili</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://jq.qq.com/?_wv=1027&k=mWmrw42s">
+            <span class="icon">
+              <i class="fab fa-qq"></i>
+            </span>
+
+            <span class="label">QQgroup</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://codeforces.com/profile/Lymone">
+            <span class="icon">
+              <i class="fa-solid fa-code"></i>
+            </span>
+
+            <span class="label">CodeForces</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://ac.nowcoder.com/acm/contest/profile/972188827">
+            <span class="icon">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </span>
+
+            <span class="label">NowCoder</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+	  
+ 
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/EasyX/" rel="tag"><i class="fa fa-tag"></i> EasyX</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/d9ef328.html" rel="prev" title="Python入门">
+      <i class="fa fa-chevron-left"></i> Python入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/a83b63e7.html" rel="next" title="C++泛型编程学习">
+      C++泛型编程学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="nav-text">前期准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%85%E6%B5%85%E7%9A%84%E5%86%99%E5%86%99%E7%94%BB%E7%94%BB"><span class="nav-text">浅浅的写写画画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%AA%8C%E8%AF%81"><span class="nav-text">技术验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E9%98%9F%E5%88%97"><span class="nav-text">链队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%98%E5%88%B6"><span class="nav-text">绘制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E8%BF%AD%E4%BB%A3"><span class="nav-text">一些迭代</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%BB%E9%9D%A2%E7%BB%98%E5%88%B6"><span class="nav-text">画面绘制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%9B%87%E5%A4%B4"><span class="nav-text">蛇头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E6%9C%BA%E5%88%B6"><span class="nav-text">退出机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E5%BE%AA%E7%8E%AF%E4%B8%AD%E7%9A%84%E5%BB%B6%E8%BF%9F"><span class="nav-text">主循环中的延迟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LymoneSnake-cpp"><span class="nav-text">LymoneSnake.cpp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Snake-h"><span class="nav-text">Snake.h</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SnakeCheck-cpp"><span class="nav-text">SnakeCheck.cpp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SnakeData-cpp"><span class="nav-text">SnakeData.cpp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SnakeDraw-cpp"><span class="nav-text">SnakeDraw.cpp</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="nav-text">写在最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lymone"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lymone</p>
+  <div class="site-description" itemprop="description">2023小目标，浅浅的拿个银牌</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LymoneLM" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LymoneLM" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://jq.qq.com/?_wv=1027&k=mWmrw42s" title="QQgroup → https:&#x2F;&#x2F;jq.qq.com&#x2F;?_wv&#x3D;1027&amp;k&#x3D;mWmrw42s" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQgroup</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codeforces.com/profile/Lymone" title="CodeForces → https:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;Lymone" rel="noopener" target="_blank"><i class="fa-solid fa-code fa-fw"></i>CodeForces</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://ac.nowcoder.com/acm/contest/profile/972188827" title="NowCoder → https:&#x2F;&#x2F;ac.nowcoder.com&#x2F;acm&#x2F;contest&#x2F;profile&#x2F;972188827" rel="noopener" target="_blank"><i class="fa-solid fa-circle-nodes fa-fw"></i>NowCoder</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/156896909" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;156896909" rel="noopener" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lymone@foxmail.com" title="E-Mail → mailto:lymone@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lymone</span>
+	</div>
+	
+
+<div class="count">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">35k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:57</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <!--<span id="busuanzi_container_site_pv"><br/>总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
+   <!-- <span class="post-meta-divider">|</span>-->
+   <!-- <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>-->
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'cd36c0f7f2b8972c4fdd',
+      clientSecret: 'ffa183affdc01b917b0286b830c63402f3146a73',
+      repo        : 'LymoneLM.github.io',
+      owner       : 'LymoneLM',
+      admin       : ['LymoneLM'],
+      id          : '996b0b2ea16f997a9418efdf8a0d0591',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

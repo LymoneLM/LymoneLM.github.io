@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/lymone.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.lymone.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="​    最近又把戴森球计划(Dyson Sphere Program)下回来了，并且发现有个叫创世之书模组挺有意思的。了解到现在模组作者都苦于游戏的数字ID，决定尝试一下能不能解决这个问题。解决问题第二步，选择框架并尝试进行模组开发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="戴森球计划BepInEx模组开发日志">
+<meta property="og:url" content="http://www.lymone.cc/p/ec842848.html">
+<meta property="og:site_name" content="莱蒙黎梦">
+<meta property="og:description" content="​    最近又把戴森球计划(Dyson Sphere Program)下回来了，并且发现有个叫创世之书模组挺有意思的。了解到现在模组作者都苦于游戏的数字ID，决定尝试一下能不能解决这个问题。解决问题第二步，选择框架并尝试进行模组开发。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-07T16:04:35.000Z">
+<meta property="article:modified_time" content="2023-03-03T13:04:08.331Z">
+<meta property="article:author" content="Lymone">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="BepInEx">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.lymone.cc/p/ec842848.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>戴森球计划BepInEx模组开发日志 | 莱蒙黎梦</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="莱蒙黎梦" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+		<a target="_blank" rel="noopener" href="https://github.com/LymoneLM" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">莱蒙黎梦</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习与思想</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>订阅</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.lymone.cc/p/ec842848.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lymone">
+      <meta itemprop="description" content="2023小目标，浅浅的拿个银牌">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="莱蒙黎梦">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          戴森球计划BepInEx模组开发日志
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-08 00:04:35" itemprop="dateCreated datePublished" datetime="2023-01-08T00:04:35+08:00">2023-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-03 21:04:08" itemprop="dateModified" datetime="2023-03-03T21:04:08+08:00">2023-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa-regular fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>17 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>​    最近又把戴森球计划(Dyson Sphere Program)下回来了，并且发现有个叫创世之书模组挺有意思的。了解到现在模组作者都苦于游戏的数字ID，决定尝试一下能不能解决这个问题。解决问题第二步，选择框架并尝试进行模组开发。</p>
+<span id="more"></span>
+<p><strong>以下部分摘抄xiaoye97版本的BIE教程</strong></p>
+<h1 id="开始编写插件"><a href="#开始编写插件" class="headerlink" title="开始编写插件"></a>开始编写插件</h1><p>我们给默认的Class1修改一个我们想要的名字，我这里改为PluginTutorial，然后将BepInEx的命名空间using一下。</p>
+<p>在BepInEx中，给我们准备了一个类，BaseUnityPlugin，这是继承于MonoBehaviour的，也就是说，我们的插件，最终会以组件的形式挂载，实际上也是这样，每个插件最终都会挂载到游戏中BepInEx的物体身上。所以我们可以使用MonoBehaviour的各种生命周期，比如Awake，Start，Update等等，这些我们以后再说，先来看一下最基础的插件的样子。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> BepInEx;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">PluginTutorial</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//插件描述特性 分别为 插件ID 插件名字 插件版本(必须为数字)</span></span><br><span class="line">    [<span class="meta">BepInPlugin(<span class="string">&quot;me.xiaoye97.plugin.Tutorial&quot;</span>, <span class="string">&quot;Tutorial Plugin&quot;</span>, <span class="string">&quot;1.0&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PluginTutorial</span> : <span class="title">BaseUnityPlugin</span> <span class="comment">//继承BaseUnityPlugin</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Unity的Start生命周期</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//输出日志</span></span><br><span class="line">            Logger.LogInfo(<span class="string">&quot;HelloWorld!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们将PluginTutorial继承BaseUnityPlugin，并在类上方添加了一个叫做BepInPlugin的特性，这是必须要完成的，只有这样才能正确加载插件。</p>
+<p>如果你不知道特性是什么，可以去补一下C#关于特性方面的知识。</p>
+<p>在BepInPlugin特性中，我们填入了3个参数，分别是插件的ID，插件的名字，插件的版本号，对于ID，我个人习惯使用域名反写法，一般是me.xiaoye97.plugin.游戏名.插件名，插件的名字没有什么特别的要求，直观即可。在插件版本这里，必须是数字形式的版本号，不能夹杂字母等。</p>
+<h1 id="其他事项"><a href="#其他事项" class="headerlink" title="其他事项"></a>其他事项</h1><p>插件的特性除了BepInExPlugin之外，还有两个可能会用到的特性。</p>
+<p>第一个是BepInProcess特性，大部分情况下，我们不需要写这个特性，但是偶尔会遇到特殊情况。比如，在I社游戏(例如AI少女、恋爱活动等)中，不仅有游戏本体，还有一个工作室程序，将游戏本体与内容创作进行了分割，这样，就会有两个exe，但是，他们是两个不同的exe，有很多地方是不能公用的。那么，只需要用这个特性，就可以限制插件在指定的exe上可以运行。<br>例如</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">BepInPlugin(<span class="string">&quot;me.xiaoye97.plugin.Tutorial&quot;</span>, <span class="string">&quot;Tutorial Plugin&quot;</span>, <span class="string">&quot;1.0&quot;</span>)</span>]</span><br><span class="line">[<span class="meta">BepInProcess(<span class="string">&quot;Maid In Makai.exe&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PluginTutorial</span> : <span class="title">BaseUnityPlugin</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，就是限定只在这个exe中运行，如果想限制在几个exe中可以运行，就继续添加这样特性即可。</p>
+<p>第二个是BepInDependency特性，如果我们的插件，需要以其他的什么插件为前置插件，那么就需要使用这个特性添加依赖，以保证只有在有前置插件的情况下加载我们的插件。</p>
+<p>BepInDependency特性有3种写法，分别是</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">BepInPlugin(<span class="string">&quot;me.xiaoye97.plugin.Tutorial&quot;</span>, <span class="string">&quot;Tutorial Plugin&quot;</span>, <span class="string">&quot;1.0&quot;</span>)</span>]</span><br><span class="line"><span class="comment">// 软依赖，如果没有前置插件，依旧继续加载</span></span><br><span class="line">[<span class="meta">BepInDependency(<span class="string">&quot;com.bepinex.plugin.somedependency&quot;</span>, BepInDependency.DependencyFlags.SoftDependency)</span>]</span><br><span class="line"><span class="comment">// 硬依赖，如果没有前置插件，则停止加载</span></span><br><span class="line">[<span class="meta">BepInDependency(<span class="string">&quot;com.bepinex.plugin.importantdependency&quot;</span>, BepInDependency.DependencyFlags.HardDependency)</span>]</span><br><span class="line"><span class="comment">// 省略参数，则默认为硬依赖</span></span><br><span class="line">[<span class="meta">BepInDependency(<span class="string">&quot;com.bepinex.plugin.anotherimportantone&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PluginTutorial</span> : <span class="title">BaseUnityPlugin</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了这些特性之外，还有一点我们需要注意的是，一个dll中可以包括多个插件，只要我们写多个继承BaseUnityPlugin的类，并为他们赋予BepInPlugin特性即可。</p>
+<h1 id="ConfigEntry"><a href="#ConfigEntry" class="headerlink" title="ConfigEntry"></a>ConfigEntry<T></h1><p>在插件功能的设计中，经常会有需要玩家自己配置的东西，比如插件的各种设置，快捷键的分配等。在BepInEx中，提供了一个ConfigEntry类简化了配置操作。</p>
+<p>我们来看一段示例：</p>
+<p>(注:由于阿B在代码页中会删除尖括号，所以我使用空格隔开)</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> BepInEx;</span><br><span class="line"><span class="keyword">using</span> BepInEx.Configuration; <span class="comment">//ConfigEntry的命名空间</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">PluginTutorial</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">BepInPlugin(<span class="string">&quot;me.xiaoye97.plugin.Tutorial&quot;</span>, <span class="string">&quot;Tutorial Plugin&quot;</span>, <span class="string">&quot;1.0&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PluginTutorial</span> : <span class="title">BaseUnityPlugin</span></span><br><span class="line">    &#123;</span><br><span class="line">        ConfigEntry&lt;<span class="built_in">int</span>&gt; intConfig;</span><br><span class="line">        ConfigEntry&lt;<span class="built_in">string</span>&gt; stringConfig;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//绑定配置文件</span></span><br><span class="line">            intConfig = Config.Bind&lt;<span class="built_in">int</span>&gt;(<span class="string">&quot;config&quot;</span>, <span class="string">&quot;TestInt&quot;</span>, <span class="number">10</span>, <span class="string">&quot;测试用Int&quot;</span>);</span><br><span class="line">            stringConfig = Config.Bind&lt;<span class="built_in">string</span>&gt;(<span class="string">&quot;config&quot;</span>, <span class="string">&quot;TestString&quot;</span>, <span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;测试用String&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//使用配置文件中的值</span></span><br><span class="line">            Logger.LogInfo(intConfig.Value);</span><br><span class="line">            Logger.LogInfo(stringConfig.Value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Config是BaseUnityPlugin的成员，是每个插件都自带的，通过这个Config进行绑定时，会自动以插件ID为文件名生成配置文件，如果你需要多个配置文件，可以手动创建ConfigFile对象。</p>
+<p>绑定时有4个参数，分别是 分类 Key 默认值 描述。分类就是这个配置在哪个标签下，比如我们之前打开控制台窗口的时候，是在[Logging.Console]下，Key则是这个配置的名字，比如打开控制台时的Enabled，默认值则是在没有配置文件的情况下，创建配置文件时使用的值，描述可填可不填，主要是提醒玩家这个配置的用处是什么。</p>
+<h1 id="使用ConfigurationManager在游戏运行时修改配置文件"><a href="#使用ConfigurationManager在游戏运行时修改配置文件" class="headerlink" title="使用ConfigurationManager在游戏运行时修改配置文件"></a>使用ConfigurationManager在游戏运行时修改配置文件</h1><p>BepInEx有多个非常实用的通用插件，放在任何游戏都可以使用，本章介绍ConfigurationManager插件，它可以在游戏内可视化的修改配置文件。</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/BepInEx/BepInEx.ConfigurationManager/releases">https://github.com/BepInEx/BepInEx.ConfigurationManager/releases</a></p>
+<p>安装插件后，在游戏中按F1打开配置管理界面，修改即可。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>通过之前的教程，我们已经知道如何编写基本的插件，如果你有C#和Unity的基础，这个时候已经可以做出一些功能了，比如通过按键修改游戏数据之类的。但是，这有很大的局限性，因为通常情况下，我们并不想通过按键来调用我们的功能，我们想让大多数的功能都是加载之后就不需要管了，或者想做一些普通情况下比较难以操作的事情。这个时候，通过Harmony进行补丁可以解决我们绝大多数的需求。</p>
+<p>Harmony的github链接 <a target="_blank" rel="noopener" href="https://github.com/pardeike/Harmony">https://github.com/pardeike/Harmony</a> 详细信息可以在github查看。</p>
+<p>Harmony中使用最频繁的两个地方就是前置补丁和后置补丁，也是最简单的，本篇文章主要就讲这两种。一些特殊的需求需要修改函数本身也是可以的，Harmony支持修改函数的IL码，不过这个就不在基础的范畴了，以后有机会的话会放在进阶篇来讲。</p>
+<h1 id="HarmonyPatch特性"><a href="#HarmonyPatch特性" class="headerlink" title="HarmonyPatch特性"></a>HarmonyPatch特性</h1><p>要对游戏中的方法进行补丁，首先我们需要确定一个目标，这里我准备了一个类，我们就以这个类为例子，对它进行补丁。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">People</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name&#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Age&#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">People</span>(<span class="params"><span class="built_in">string</span> name, <span class="built_in">int</span> age</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Name = name;</span><br><span class="line">        Age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Sleep</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;睡觉&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Say</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Say</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(content);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Say</span>(<span class="params"><span class="built_in">int</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(content);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个简单的People类，有两个属性，分别是姓名和年龄，一个构造函数，一个Sleep方法，还有3个说话的方法，使用了3种重载。</p>
+<p>以Sleep方法为例，我们写一个最简单的补丁。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Sleep&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">PeopleSleepPatch</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Postfix</span>(<span class="params">People __instance</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(__instance.Name + <span class="string">&quot;睡觉了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的HarmonyPatch特性就用于确定补丁目标，这个特性的参数可以写在一排也可以分成几排写。例子中的两个参数分别是要补丁的类型，还有要补丁的方法的名字。这是最简单的情况，实际上我们还经常会遇到其他几种情况。比如，Say方法有3个重载，如何确定要补丁哪一个？属性要怎么补丁？我们再来看几个例子。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Say&quot;</span>, new Type[</span>] &#123; &#125;)]</span><br><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Say&quot;</span>, new Type[</span>] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;)]</span><br><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Say&quot;</span>, new Type[</span>] &#123; <span class="keyword">typeof</span>(<span class="built_in">int</span>) &#125;)]</span><br></pre></td></tr></table></figure>
+<p>如此，面对有重载的情况，我们只需要在添加一个参数，这个参数是一个Type数组，我们按顺序将参数类型填入即可。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Name&quot;</span>, MethodType.Getter</span>]</span><br><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Age&quot;</span>, MethodType.Setter</span>]</span><br><span class="line">[<span class="meta">HarmonyPatch(typeof(People), MethodType.Constructor</span>]</span><br></pre></td></tr></table></figure>
+<p>面对属性和构造函数，我们可以使用MethodType枚举来当作参数。需要注意的是，补丁构造函数时，函数名不能写dnSpy中看到的.ctor，而是应该直接省略不写函数名。</p>
+<h1 id="补丁方法"><a href="#补丁方法" class="headerlink" title="补丁方法"></a>补丁方法</h1><p>既然已经可以确定补丁目标了，接下来让我们了解一下最基础最常用的两种补丁方法，Prefix(前置补丁)、Postfix(后置补丁)。</p>
+<p>先说后置补丁，这是最简单的，它在补丁目标运行结束之后运行，上面示例中的就是后置补丁，可以使用__result参数接收目标的返回值。</p>
+<p>然后是前置补丁，顾名思义，它是在补丁目标运行之前运行的，这个相对复杂一点。因为我们可以选择是否执行原方法。我们来看两个例子。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Say&quot;</span>,  new Type[</span>] &#123; <span class="keyword">typeof</span>(<span class="built_in">string</span>) &#125;)]</span><br><span class="line"><span class="keyword">class</span> <span class="title">PeopleSayPatch</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">Prefix</span>(<span class="params"><span class="keyword">ref</span> <span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        content = <span class="string">&quot;要说的内容已被修改&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">HarmonyPatch(typeof(People), <span class="string">&quot;Name&quot;</span>,  MethodType.Getter)</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">PeopleNamePatch</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">Prefix</span>(<span class="params"><span class="keyword">ref</span> <span class="built_in">string</span> __result</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        __result = <span class="string">&quot;张三&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">//拦截原方法，直接使用我们给出的结果</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个例子，我们将content的值修改为了我们自己想要的值，然后返回true表示让原函数继续执行。第二个例子，我们直接将最终结果修改，然后返回false，表示阻止原函数执行。如果你搞不明白IL代码，不知道如何修改函数本体，也可以通过前置补丁的方式自己计算结果然后修改。</p>
+<h1 id="补丁参数"><a href="#补丁参数" class="headerlink" title="补丁参数"></a>补丁参数</h1><p>在上面的例子中，我们有时候使用了<strong>instance，有时候使用了</strong>result，想必读者还留有疑问，为什么要这么写。其实，这是Harmony作者为我们定好的获取方法信息的方式。</p>
+<p>大概情况如下:</p>
+<ul>
+<li>补丁方法<strong>必须</strong>是<strong>静态</strong>方法</li>
+<li>Prefix需要返回<strong>void</strong>或者<strong>bool</strong>类型(void即不拦截)</li>
+<li>Postfix需要返回<strong>void</strong>类型，或者返回的类型要与<strong>第一个</strong>参数一致(直通模式)</li>
+<li>如果原方法不是静态方法，则可以使用名为<strong>__instance</strong>(两个下划线)的参数来访问对象实例</li>
+<li>可以使用名为<strong>__result</strong>(两个下划线)的参数来访问方法的返回值，如果是Prefix，则得到返回值的默认值</li>
+<li>可以使用名为<strong>__state</strong>(两个下划线)的参数在Prefix补丁中存储任意类型的值，然后在Postfix中使用它，你有责任在Prefix中初始化它的值</li>
+<li>可以使用与原方法中<strong>同名的参数</strong>来访问对应的参数，如果你要写入非引用类型，记得使用ref关键字</li>
+<li>补丁使用的参数必须<strong>严格对应</strong>类型(或者使用object类型)和名字</li>
+<li>我们的补丁只需要定义我们需要用到的参数，不用把所有参数都写上</li>
+<li>要允许补丁重用，可以使用名为<strong>__originalMethod</strong>(两个下划线)的参数注入原始方法</li>
+</ul>
+<p>Transpilers还有一些可选参数，我们这里不做探讨，想了解可以访问Harmony的wiki。</p>
+<h1 id="自动补丁"><a href="#自动补丁" class="headerlink" title="自动补丁"></a>自动补丁</h1><p>补丁的情况我们大体介绍完了，但是我们现在只是写了补丁，还没有对游戏进行补丁，其实很简单，我们只要在插件加载的时候，加上一句代码就好。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Harmony(<span class="string">&quot;me.xiaoye97.plugin.Tutorial&quot;</span>).PatchAll(); <span class="comment">//以作者输入的字符串作为ID，对程序集中所有找到的补丁方法进行补丁。</span></span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Harmony.CreateAndPatchAll(<span class="keyword">typeof</span>(PluginTutorial)); <span class="comment">//Harmony以类名为ID进行补丁，并且只补丁此类下的方法。</span></span><br></pre></td></tr></table></figure>
+<p>除了自动补丁之外，还可以进行手动补丁，可以更加细微的控制，就不在基础教程中说了，读者可以通过GitHub继续了解，以后的教程如果遇到需要手动补丁的情况我再继续讲解。</p>
+<h1 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h1><p>对于新接触BepInEx或者UnityModManager Mod开发的人来说，Harmony可能比较陌生，如果看了本篇教程之后还是感觉不太好下手，可以使用dnSpy反编译其他人制作的插件，或者如果他们有开源的话，可以直接查看开源的代码进行学习模仿。我在我的Github上也放了几个小插件，大家可以查看学习。</p>
+<p>我的Github地址：<a target="_blank" rel="noopener" href="https://github.com/xiaoye97">https://github.com/xiaoye97</a></p>
+<hr>
+<p>23.1.8 02:41</p>
+<p>突然发觉给DSP换个英文ID是非常大的工程</p>
+<p>并且我可能需要一套完整的解决方案和处理流程</p>
+<p>例如ABN_RecipeUnlockCondition.cs中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (recipeProto.preTech == null || this.gameData.history.TechUnlocked(recipeProto.preTech.ID))</span><br></pre></td></tr></table></figure>
+<p>的使用，显然this.gameData.history.TechUnlocked传参为int</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public bool TechUnlocked(int techId) =&gt; this.techStates.ContainsKey(techId) &amp;&amp; this.techStates[techId].unlocked;</span><br></pre></td></tr></table></figure>
+<p>如果我想更改为英文ID，这些判定有关的需要全部从做</p>
+<p>===</p>
+<p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/cn/2020.3/Manual/ExecutionOrder.html">事件函数的执行顺序 - Unity 手册 (unity3d.com)</a></p>
+<p>Unity脚本生命周期</p>
+<p>===</p>
+<p><strong>以下部分为3DM MOD版教程</strong></p>
+<p>一个示例</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> BepInEx;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">MyFirstBepInExMod</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">BepInPlugin(<span class="string">&quot;aoe.top.plugins.MyFirstBepInExMod&quot;</span>, <span class="string">&quot;这是我的第一个BepIn插件&quot;</span>, <span class="string">&quot;1.0.0.0&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyFirstBepInExMod</span> : <span class="title">BaseUnityPlugin</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 在插件启动时会直接调用Awake()方法</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Awake</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 使用Debug.Log()方法来将文本输出到控制台</span></span><br><span class="line">            Debug.Log(<span class="string">&quot;Hello, world!&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在所有插件全部启动完成后会调用Start()方法，执行顺序在Awake()后面；</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            Debug.Log(<span class="string">&quot;这里是Start()方法中的内容!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 插件启动后会一直循环执行Update()方法，可用于监听事件或判断键盘按键，执行顺序在Start()后面</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> key = <span class="keyword">new</span> BepInEx.Configuration.KeyboardShortcut(KeyCode.F9);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (key.IsDown())</span><br><span class="line">            &#123;</span><br><span class="line">                Debug.Log(<span class="string">&quot;这里是Updatet()方法中的内容，你看到这条消息是因为你按下了F9&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 在插件关闭时会调用OnDestroy()方法</span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnDestroy</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            Debug.Log(<span class="string">&quot;当你看到这条消息时，就表示我已经被关闭一次了!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="HarmonyPrefix"><a href="#HarmonyPrefix" class="headerlink" title="HarmonyPrefix"></a>HarmonyPrefix</h3><p>HarmonyPrefix是Harmony为我们提供的一个接口，它将在我们指定的函数前进行执行，并且我们可以返回一个bool值来控制是否继续继续执行游戏原函数；<br>需要配合HarmonyPatch一起使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 19 个重载</span><br><span class="line">public HarmonyPatch();</span><br><span class="line">public HarmonyPatch(Type declaringType);</span><br><span class="line">public HarmonyPatch(MethodType methodType);</span><br><span class="line">public HarmonyPatch(string methodName);</span><br><span class="line">public HarmonyPatch(Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(MethodType methodType, params Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(string methodName, MethodType methodType);</span><br><span class="line">public HarmonyPatch(string methodName, params Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(Type[] argumentTypes, ArgumentType[] argumentVariations);</span><br><span class="line">public HarmonyPatch(Type declaringType, MethodType methodType);</span><br><span class="line">public HarmonyPatch(Type declaringType, string methodName);</span><br><span class="line">public HarmonyPatch(Type declaringType, Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(Type declaringType, string methodName, MethodType methodType);</span><br><span class="line">public HarmonyPatch(string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations);</span><br><span class="line">public HarmonyPatch(Type declaringType, string methodName, params Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations);</span><br><span class="line">public HarmonyPatch(Type declaringType, MethodType methodType, params Type[] argumentTypes);</span><br><span class="line">public HarmonyPatch(Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations);</span><br><span class="line">public HarmonyPatch(Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations);</span><br><span class="line">public HarmonyPatch(string assemblyQualifiedDeclaringType, string methodName, MethodType? methodType = null, Type[] argumentTypes = null, ArgumentType[] argumentVariations = null);</span><br></pre></td></tr></table></figure>
+<p>如：<br>我们想要对Mecha类下的SetForNewGame函数进行拦截，那么就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[HarmonyPrefix]</span><br><span class="line">[HarmonyPatch(typeof(Mecha), &quot;SetForNewGame&quot;)]</span><br><span class="line">public static bool Mecha_SetForNewGame_Prefix()</span><br><span class="line">&#123;</span><br><span class="line">    // 这里写入我们自己的内容            </span><br><span class="line">    Debug.Log(&quot;这里的内容将会在游戏函数执行前进行执行&quot;);</span><br><span class="line">    // 返回 true为继续执执行游戏原函数，返回 false为不执行游戏原函数,</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="HarmonyPostfix"><a href="#HarmonyPostfix" class="headerlink" title="HarmonyPostfix"></a>HarmonyPostfix</h3><p>HarmonyPostfix一样也是Harmony为我们提供的一个接口，它将在我们指定的函数执行完毕后，再执行。<br>一样需要配合HarmonyPatch一起使用</p>
+<p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[HarmonyPostfix]</span><br><span class="line">[HarmonyPatch(typeof(Mecha), &quot;SetForNewGame&quot;)]</span><br><span class="line">public static void Mecha_SetForNewGame_Postfix()</span><br><span class="line">&#123;</span><br><span class="line">    // 这里写入我们自己的内容            </span><br><span class="line">    Debug.Log(&quot;这里的内容需要等待游戏原函数执行完后才会执行&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<br>1.我们的函数需要使用static静态函数，不然会报错；<br>2.函数名可以自定义，但尽量不要和游戏原有函数冲突；<br>3.两种拦截方式大同小异，希望大家举一反三。</p>
+</blockquote>
+<h3 id="this"><a href="#this" class="headerlink" title="this"></a>this</h3><p>在游戏原函数中难免会出现this参数，万能的Harmony当然也考虑到了这一点，针对于this，我们可以向函数中传递一个__instance。</p>
+<p>游戏原函数内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void SetForNewGame()</span><br><span class="line">&#123;</span><br><span class="line">    ModeConfig freeMode = Configs.freeMode;</span><br><span class="line">    this.coreEnergyCap = freeMode.mechaCoreEnergyCap;</span><br><span class="line">    this.coreEnergy = this.coreEnergyCap;</span><br><span class="line">    this.corePowerGen = freeMode.mechaCorePowerGen;</span><br><span class="line">    this.reactorPowerGen = freeMode.mechaReactorPowerGen;</span><br><span class="line">    this.reactorEnergy = 0.0;</span><br><span class="line">    this.reactorItemId = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以这样写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[HarmonyPostfix]</span><br><span class="line">[HarmonyPatch(typeof(Mecha), &quot;SetForNewGame&quot;)]</span><br><span class="line">public static void Mecha_SetForNewGame_Postfix(Mecha __instance)</span><br><span class="line">&#123;</span><br><span class="line">    ModeConfig freeMode = Configs.freeMode;</span><br><span class="line">    __instance.coreEnergyCap = freeMode.mechaCoreEnergyCap;</span><br><span class="line">    __instance.coreEnergy = __instance.coreEnergyCap;</span><br><span class="line">    __instance.corePowerGen = freeMode.mechaCorePowerGen;</span><br><span class="line">    __instance.reactorPowerGen = freeMode.mechaReactorPowerGen;</span><br><span class="line">    __instance.reactorEnergy = 0.0;</span><br><span class="line">    __instance.reactorItemId = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注释：</p>
+<ul>
+<li>Mecha<code>__instance</code>中，<code>Mecha</code> 为当前类的名称，<code>__instance</code>为Harmony的固有写法（有两个“_”）；</li>
+<li>这种方法只限于操作公共public变量和函数；</li>
+</ul>
+</blockquote>
+<h3 id="游戏私有变量"><a href="#游戏私有变量" class="headerlink" title="游戏私有变量"></a>游戏私有变量</h3><p>刚刚提到，“__instance”只能获取游戏的公共变量和方法，如果我们要获取游戏中私有的变量和方法的话，就需要用到Traverse工具；<br>我们可以通过Traverse工具,方便访问游戏里所有公有,私有,受保护的变量,方法,以及属性,</p>
+<p>如我们想获取游戏中的变量，那么在我们的插件中就可以这么写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[HarmonyPostfix]</span><br><span class="line">[HarmonyPatch(typeof(Mecha), &quot;SetForNewGame&quot;)]</span><br><span class="line">public static void Mecha_SetForNewGame_Postfix(Mecha __instance)</span><br><span class="line">&#123;</span><br><span class="line">    // 获取 private float _dronesSpeed; 的值</span><br><span class="line">    var _droneCount= Traverse.Create(__instance).Field(&quot;_droneCount&quot;).GetValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="拓展知识"><a href="#拓展知识" class="headerlink" title="拓展知识"></a>拓展知识</h3><blockquote>
+<p>来自 <a target="_blank" rel="noopener" href="https://bbs.3dmgame.com/thread-5870433-1-1.html">https://bbs.3dmgame.com/thread-5870433-1-1.html</a><br><strong>关于Traverse的使用:</strong><br>Traverse是harmony类库下的一个工具类,也就是在一开始引用的using harmony;这条语句后,方便我们使用的一个类,首先我们要明白private和public还有protected三个关键词的区别,具体可以百度,我这里仅从结论讲明,除了public,其他的private和protected从外界是无法访问到的,但是用Traverse类不管它是public,private,protected,均可以强行访问,为什么不任何地方都使用Traverse去访问呢,因为性能问题,用Traverse要走映射,简单来说运行速度会有些许影响</p>
+<p>Traverse的具体使用方法简单的来说明一下,Traverse.create(类的实例),表名我要将一个类的实例转为Traverse对象,简单来说就是附加功能,比如我们以前都是自己买菜,后来有了XX外卖,我们不需要亲力亲为了,XX外卖就等于Traverse对象了(这里就是将映射功能简单化了,不需要自己打代码了),这样我们就有一个可以访问类实例的Traverse对象了,在上面法宝的例子中,我是直接写为了<br>var itemID = Traverse.Create(<strong>instance).Field(“itemID”).GetValue();<br>这是一种简化的写法的,下面我分开并且逐步注释一下<br>Traverse t = Traverse.Create(</strong>instance);//根据__instance (ToilRefining类的实例) 创建 Traverse对象,并且用t表示<br>Traverse f = t.Field(“itemID”);//在ToilRefining实例里面有个itemID的字段,找到他并且创建一个Traverse对象,用f表示,这样可以强行访问 itemID,因为itemID是私有的没法直接访问<br>int itemID = f.GetValue();//将Traverse版本的itemID提取成可以直接访问的数值,因为Traverse并不知道原本itemID是什么类型的,所以我们要用标注这是个int类型了,从源代码中我们可以知道itemID的变量类型,对应修改即可<br>于是我们就访问到itemID了<br>既然有获取,自然就有修改,修改我们可以用f.SetValue(数值),这里就不需要指定了,因为你在输入数值的时候,他会自动把你输入的数据转成对应的类型</p>
+<p>这里我说一下字段,属性,方法的意思,这是C#的基础,字段代表类变量,可以理解为类中的全局变量,可以再类中任意地方访问到</p>
+<p>属性是字段的升级版,他在源代码中的样子是这样的</p>
+<p>他跟字段的定义差不多,但是后面会有括号,里面还有set和get,这种样子的就是属性,我们不能通过Traverse.Field(字段名字),而是通过Traverse.Property(属性名字)来访问,如果定义中只有get,表名这个东西只能获取,不能更改(就是游戏开发者也不能),get和set都在就是可以获取也可以更改</p>
+<p>最后就是方法,在C#中称为方法,C语言中称为函数,比如游戏源码中,MakeFaBao就是制作法宝的方法,他定义时后面跟随的是()这种括号,我们想要访问游戏private的方法可以用Traverse.Method(方法名字).GetValue()来运行,注意后面要加上.GetValue(),因为仅仅Traverse.Method(方法名字)是获取的方法的Traverse对象,而没有运行他</p>
+<p>C#中有一个关键词是var,这个关键词是这个变量是智能根据你后面赋值来判断他的变量类型的<br>比如 var a = 6;//a是int类型<br>var b = “我是文字”;//b就是string类型的<br>于是之前为了itemID那么多行的代码就可以省略为var itemID = Traverse.Create(<strong>instance).Field(“itemID”).GetValue();一句话搞定<br>当然也可以var t = Traverse.Create(</strong>instance);<br>var itemID = t.Field(“itemID”).GetValue();var XXXX = t.Field(“XXXX”).GetValue();<br>来多次获取</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+		
+			<div>
+				<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+			</div>
+		
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Lymone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.lymone.cc/p/ec842848.html" title="戴森球计划BepInEx模组开发日志">http://www.lymone.cc/p/ec842848.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/156896909">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
+
+            <span class="label">Bilibili</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://jq.qq.com/?_wv=1027&k=mWmrw42s">
+            <span class="icon">
+              <i class="fab fa-qq"></i>
+            </span>
+
+            <span class="label">QQgroup</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://codeforces.com/profile/Lymone">
+            <span class="icon">
+              <i class="fa-solid fa-code"></i>
+            </span>
+
+            <span class="label">CodeForces</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://ac.nowcoder.com/acm/contest/profile/972188827">
+            <span class="icon">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </span>
+
+            <span class="label">NowCoder</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+	  
+ 
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C#</a>
+              <a href="/tags/Unity/" rel="tag"><i class="fa fa-tag"></i> Unity</a>
+              <a href="/tags/BepInEx/" rel="tag"><i class="fa fa-tag"></i> BepInEx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/ddf9c66f.html" rel="prev" title="面向Unity的C#学习记录">
+      <i class="fa fa-chevron-left"></i> 面向Unity的C#学习记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/av170001.html" rel="next" title="关于三体TV版">
+      关于三体TV版 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E7%BC%96%E5%86%99%E6%8F%92%E4%BB%B6"><span class="nav-text">开始编写插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BA%8B%E9%A1%B9"><span class="nav-text">其他事项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConfigEntry"><span class="nav-text">ConfigEntry</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ConfigurationManager%E5%9C%A8%E6%B8%B8%E6%88%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">使用ConfigurationManager在游戏运行时修改配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HarmonyPatch%E7%89%B9%E6%80%A7"><span class="nav-text">HarmonyPatch特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E4%B8%81%E6%96%B9%E6%B3%95"><span class="nav-text">补丁方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E4%B8%81%E5%8F%82%E6%95%B0"><span class="nav-text">补丁参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A1%A5%E4%B8%81"><span class="nav-text">自动补丁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AF%9D"><span class="nav-text">后话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HarmonyPrefix"><span class="nav-text">HarmonyPrefix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HarmonyPostfix"><span class="nav-text">HarmonyPostfix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this"><span class="nav-text">this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B8%E6%88%8F%E7%A7%81%E6%9C%89%E5%8F%98%E9%87%8F"><span class="nav-text">游戏私有变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%93%E5%B1%95%E7%9F%A5%E8%AF%86"><span class="nav-text">拓展知识</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lymone"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lymone</p>
+  <div class="site-description" itemprop="description">2023小目标，浅浅的拿个银牌</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LymoneLM" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LymoneLM" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://jq.qq.com/?_wv=1027&k=mWmrw42s" title="QQgroup → https:&#x2F;&#x2F;jq.qq.com&#x2F;?_wv&#x3D;1027&amp;k&#x3D;mWmrw42s" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQgroup</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codeforces.com/profile/Lymone" title="CodeForces → https:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;Lymone" rel="noopener" target="_blank"><i class="fa-solid fa-code fa-fw"></i>CodeForces</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://ac.nowcoder.com/acm/contest/profile/972188827" title="NowCoder → https:&#x2F;&#x2F;ac.nowcoder.com&#x2F;acm&#x2F;contest&#x2F;profile&#x2F;972188827" rel="noopener" target="_blank"><i class="fa-solid fa-circle-nodes fa-fw"></i>NowCoder</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/156896909" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;156896909" rel="noopener" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lymone@foxmail.com" title="E-Mail → mailto:lymone@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lymone</span>
+	</div>
+	
+
+<div class="count">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">35k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:57</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <!--<span id="busuanzi_container_site_pv"><br/>总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
+   <!-- <span class="post-meta-divider">|</span>-->
+   <!-- <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>-->
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'cd36c0f7f2b8972c4fdd',
+      clientSecret: 'ffa183affdc01b917b0286b830c63402f3146a73',
+      repo        : 'LymoneLM.github.io',
+      owner       : 'LymoneLM',
+      admin       : ['LymoneLM'],
+      id          : '9ac02b35de4a2254b5eb98a3549593b5',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
