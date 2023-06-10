@@ -14,8 +14,10 @@
 
 这里是地址：
 
-[[Cloudflare高速分流]](https://ww1.lymone.cc)https://ww1.lymone.cc
+[[Cloudflare高速分流]](https://www.lymone.cc)
+https://www.lymone.cc | https://lymone.pages.dev
 
-[[GitHub稳定分流]](https://www.lymone.cc)https://www.lymone.cc
+[[GitHub稳定分流]](https://3w.lymone.cc)
+https://3w.lymone.cc | https://lymonelm.github.io
 
 [1]:“./p/”目录下的全部文件及这些文件的一部分在其他文件的引用
