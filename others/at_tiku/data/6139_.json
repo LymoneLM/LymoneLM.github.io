@@ -366,15 +366,15 @@
             "oplist": [
                 {
                     "tag": "A",
-                    "option": "0.1≤p&lt;1.6"
+                    "option": "0.1≤p<1.6"
                 },
                 {
                     "tag": "B",
-                    "option": "1.6≤p&lt;10"
+                    "option": "1.6≤p<10"
                 },
                 {
                     "tag": "C",
-                    "option": "10≤p&lt;100"
+                    "option": "10≤p<100"
                 }
             ]
         },
