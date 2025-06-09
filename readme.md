@@ -14,9 +14,6 @@
 
 这里是地址：
 
-[[Cloudflare高速分流]](https://www.lymone.cc)
-https://www.lymone.cc | https://lymone.pages.dev
-
 [[GitHub稳定分流]](https://3w.lymone.cc)
 https://3w.lymone.cc | https://lymonelm.github.io
 
