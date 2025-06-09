@@ -6,15 +6,12 @@
 
 莱蒙黎梦博客为Lymone黎梦的个人博客
 
-除非另有说明，否则全部博文[^1]内容依据<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>许可证进行授权
+除非另有说明，否则全部博文内容依据<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>许可证进行授权
 
-博客使用HEXO+NeXT搭建
+博客使用HEXO+NeXT搭建，在云服务和GitHub Page同步部署
 
-在GitHub Page和Cloudflare Page同步部署
+[[直接访问]](https://www.lymone.cc)
+[https://www.lymone.cc](https://www.lymone.cc)
 
-这里是地址：
-
-[[GitHub稳定分流]](https://3w.lymone.cc)
+[[GitHub Page备用地址]](https://3w.lymone.cc)
 https://3w.lymone.cc | https://lymonelm.github.io
-
-[1]:“./p/”目录下的全部文件及这些文件的一部分在其他文件的引用
