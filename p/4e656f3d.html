@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/lymone.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.lymone.cc","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="搭建私人在线小说藏馆 偶遇doc&#x2F;docx保存的带乱码小说强如怪物，无需拼尽全力即可战胜">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reader3书柜，word转txt，正则清理乱码">
+<meta property="og:url" content="http://www.lymone.cc/p/4e656f3d.html">
+<meta property="og:site_name" content="莱蒙黎梦">
+<meta property="og:description" content="搭建私人在线小说藏馆 偶遇doc&#x2F;docx保存的带乱码小说强如怪物，无需拼尽全力即可战胜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s21.ax1x.com/2025/07/02/pVu0BWR.png">
+<meta property="og:image" content="https://s21.ax1x.com/2025/07/02/pVu0rS1.png">
+<meta property="article:published_time" content="2025-07-01T20:05:13.000Z">
+<meta property="article:modified_time" content="2025-07-02T10:50:12.763Z">
+<meta property="article:author" content="Lymone">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="正则">
+<meta property="article:tag" content="办公">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s21.ax1x.com/2025/07/02/pVu0BWR.png">
+
+<link rel="canonical" href="http://www.lymone.cc/p/4e656f3d.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>reader3书柜，word转txt，正则清理乱码 | 莱蒙黎梦</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="莱蒙黎梦" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+		<a target="_blank" rel="noopener" href="https://github.com/LymoneLM" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">莱蒙黎梦</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">全栈开发日志</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-rss">
+
+    <a href="/atom.xml" rel="section"><i class="fa fa-rss fa-fw"></i>订阅</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.lymone.cc/p/4e656f3d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lymone">
+      <meta itemprop="description" content="什么都学也是一种全栈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="莱蒙黎梦">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          reader3书柜，word转txt，正则清理乱码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-07-02 04:05:13 / 修改时间：18:50:12" itemprop="dateCreated datePublished" datetime="2025-07-02T04:05:13+08:00">2025-07-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa-regular fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>搭建私人在线小说藏馆</p>
+<p>偶遇doc/docx保存的带乱码小说强如怪物，无需拼尽全力即可战胜</p>
+<span id="more"></span>
+<p>事情是这样的，自从去年11月我鼓捣了自己的NAS，所有的照片、电影、文档都开始远端存储，多端共享本地无负担的日子别提多惬意了。<del>拥有一个大容量NAS对于有仓鼠症的网民真的很重要</del></p>
+<p>但是近来我突然发现，我的一些小说收藏还没有上NAS，也没有被很好的管理，于是一拍脑袋一锤腿——搞个在线书柜！</p>
+<h2 id="什么书柜好呢"><a href="#什么书柜好呢" class="headerlink" title="什么书柜好呢"></a>什么书柜好呢</h2><h3 id="Calibre-Web"><a href="#Calibre-Web" class="headerlink" title="Calibre-Web"></a>Calibre-Web</h3><p>因为以前我用过kindle看书，所以接触过Calibre。</p>
+<p>kindle这玩意看似好，但是只要不是在amazon买电子书，用起来还是很麻烦的。当时我为了上传有封面有章节划分的小说，弄了好几个软件协同，爬来爬去，转来转去的，最后用Calibre做的最终的管理和上传（顺便一提这玩意的格式转换是真的慢）。</p>
+<p>Calibre给我的印象就是：功能强大但是非常非常的Heavy。不过考虑到Calibre是用来管理出版物的，支持那么多格式和功能，有些负担在所难免；更何况复杂几乎只存在于导入的时候，后续使用起来还是很不错的。</p>
+<p>于是在搜索到还有Calibre-Web这种好东西的时候，我没做太多考究就选定了这个方案。</p>
+<p>加之当时云计算课程临近结课，迫切需要一个课程设计（好吧我承认搭建个这玩意当课程设计确实是有点糊弄了所以我额外鼓捣了FRP+反代+高可用什么的）我几乎立刻去鼓捣了这玩意。</p>
+<p>如果你有注意看题目的话，结果应该显而易见。结论就是这玩意并不是为我的需求提供的，网页端的上传非常难用，几乎只能借助客户端来管理书库。并且也不支持在线阅读，可以说就是给Kindle或者其他阅读器提供的一个下载站。</p>
+<p>搭建过程这里不赘述了，可以拉docker镜像也可以直接安装第三方套件（对于群晖用户）</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pVu0BWR"><img src="https://s21.ax1x.com/2025/07/02/pVu0BWR.png" alt="pVu0BWR.png"></a></p>
+<h3 id="Reader3"><a href="#Reader3" class="headerlink" title="Reader3"></a>Reader3</h3><p>本期主角</p>
+<p>吸取上次搭建踩坑的经验，这次多做了一些对比，选择了一个比较适合我的项目。事实上，这个项目有点类似于只有书柜的私人笔趣阁，提供导入书源的途径，也提供一个类似起点的在线阅读器。（还有其他的更像笔趣阁的项目，那就不太符合我的需求了）</p>
+<h4 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h4><p>我拉取的是 hectorqin/reader:latest 这个镜像</p>
+<p>不出意外的话这是项目地址 <a target="_blank" rel="noopener" href="https://github.com/hectorqin/reader">hectorqin/reader: 阅读3服务器版，桌面端，iOS可用。后端 Kotlin + Spring Boot + Vert.x + Coroutine ；前端 Vue.js + Element。麻烦点点star，关注一下公众号【假装大佬】❗️</a></p>
+<p>搭建起来也不难，如果有需要可以参考一下这个大佬的教程：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/601047441">快速搭建个人小说站：免费看海量小说 - 知乎</a></p>
+<h4 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h4><p>这里有一点小技巧，这个项目实际上会把数据存到/storage，但是会从/storage/localStore拉取本地书籍。如果你和我一样有个其他的文件夹存储着书籍数据，可以像我这样额外挂载一下这个目录，这样就可以读取到你的收藏。</p>
+<p><a target="_blank" rel="noopener" href="https://imgse.com/i/pVu0rS1"><img src="https://s21.ax1x.com/2025/07/02/pVu0rS1.png" alt="pVu0rS1.png"></a></p>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><p>首先就是这玩意可以很方便的批量导入本地书，能挂载一个目录作为“书仓”。而且不会对原始的文件造成影响，也不会把原始文件复制的到处都是（说你呢微信），非常的nice。</p>
+<p>其次就是可以在线阅读，而且支持多种终端。因为不同端同账户本质上访问的都是同一套配置所以也可以多端同步阅读进度，很不错。</p>
+<p>因为主要服务的还是小说所以对于小说分章有些优化，比较常见但是很实用的功能。</p>
+<h4 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h4><p>系列短文不友好。我保存了一些从p站down的小短文，这些短文是根据文件夹分的系列；但是在reader3的话只能每一章（一个文档）作为一篇进行导入，这样就会导致比较混乱。感觉这个平台应该需要一个短文分区，可以把一套文作为一个系列导入。</p>
+<p>移动端阅读体验有点迷。不过这个问题也不算太大。根据这个项目社群里交流的方法，实际可以通过Edge或者Chrome等应用把网页安装为英语，这样就能比较方便的全屏使用。不过由于我没有配置https所以暂时没有体验到。</p>
+<p>信息展示不全，无效信息多。有一些小说（尤其是轻小说或者P站短文）题目比较的长，而这个平台即使的展示信息最多的列表模式也不能很好的展示全部题目。同时因为大多内容我都是通过txt导入的，并没有封面，而这里又强制显示一个图片封面，会导致大量空间被无效的信息占据。感觉缺乏的是一个真正的列表模式和一个根据标题生成图片封面的功能（这一块有个叫VBOOK的软件做的还挺好的）。</p>
+<p>文件管理割裂。虽然有文件的导入功能，但是感觉这个导入像是附加进来的，使用起来非常的不方便，即使我用竖屏展示也不能同屏展示足够多的信息（文件数目）。总之就是使用起来非常的奇怪，给人的感觉就是给你全选然后一键导入的，并不考虑给你在文件方面做过多的挑选。还有他提供的一个筛选已导入书籍的功能感觉有点问题，实际已经导入的还是会被选中（不过讲道理感觉应该是按照文件路径进行筛选的，没道理会出问题吧）</p>
+<p>本地搜索缺失。这个比较奇怪，他可能比较多的考虑到使用书源进行搜书的用户，搜索会直接在书源里搜，并不会搜索本地导入的书籍。</p>
+<h4 id="anyway"><a href="#anyway" class="headerlink" title="anyway"></a>anyway</h4><p>不过这玩意毕竟是开源项目，考虑之后fork一个做些修改吧。原项目说是部分开源，我看了下应该是有个kindle专供页面是需要授权收费的，猜测这部分是闭源的，应该不太影响我要的功能。</p>
+<p>总体来说还是不错的，目前需求的情况下暂时足够我使用了。</p>
+<h2 id="导入收藏"><a href="#导入收藏" class="headerlink" title="导入收藏"></a>导入收藏</h2><p>旧有的Calibre书库我还是准备继续用Calibre管理，暂时不打算导入这个平台。不过那个文件夹里的都是配好的mobi和epub一类的，相必导入也没啥难度。</p>
+<p>有些网文小说什么的也是顺利的导入了，结果在某个神秘封闭网站资源导入时遇到了大麻烦。</p>
+<p>这玩意！居然！是！用！Word！保存！的！</p>
+<p><strong>啊？</strong></p>
+<blockquote>
+<p>纯文本一定要用纯文本格式</p>
+</blockquote>
+<p>你知道我面对一万个word文档的时候有多震撼吗？爬这个的简直是神人了，为他的毅力鼓掌！</p>
+<p>我感觉只有N年前的小学信息技术课的时候才有将网页保存到word这种神秘的要求吧？！</p>
+<p>考虑到论坛网页其实还会有很多其他的信息，它能做到只保留正文也是很坚持了。</p>
+<p>不出意外的，reader3并不支持导入word版的资源。</p>
+<p>还有啥好说的，转格式呗！</p>
+<h3 id="word2txt-py"><a href="#word2txt-py" class="headerlink" title="word2txt.py"></a>word2txt.py</h3><p>内容几乎是处纯血的AIGC，放个全文链接<a target="_blank" rel="noopener" href="https://github.com/LymoneLM/LymoneTest/blob/master/Tools/doc2txt.py">LymoneTest/Tools/doc2txt.py at master · LymoneLM/LymoneTest</a></p>
+<p>基本流程就是遍历指定目录，然后找到所有doc/docx文件，提取对应的文本保存在临时文件里，清洗，最后写入原目录同名txt文件</p>
+<h4 id="乱码处理"><a href="#乱码处理" class="headerlink" title="乱码处理"></a>乱码处理</h4><p>值得一提的是这个清洗环节，最初版的脚本提取完文本是这个风格的：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">第一章： 0 A) l&#x27; r( c6 s+ \: d* _ </span><br><span class="line">作者：作者名# ^* y; q+ _0 i % O&#x27; u8 K7 ]1 v$ H) C </span><br><span class="line">我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字6 N&quot; k0 a7 _( a/ p 0 X) e&quot; I. M$ N&amp; b! J# g </span><br><span class="line">我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字。</span><br><span class="line">/ b5 Q: B&#x27; E. c&amp; j 3 U) &#125;. &#125;- P% c&amp; Y&quot; N </span><br><span class="line">我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字( [&amp; &#125;&amp; ?&#x27; G: V- j% g&#x27; &#123; 8 [2 T2 C, o5 \4 d8 H4 H5 e </span><br><span class="line">我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字 B( ]3 E( o$ v; i0 p9 D% q 7 ]0 i) Q3 T3 M&amp; U/ t5 B$ ?4 ~6 Y </span><br><span class="line">我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字我是正文脱敏替代字</span><br></pre></td></tr></table></figure>
+<p>可以看到在有些位置会有一些乱码。因为我对word内部究竟是如何存储内容的并不是十分的了解，首先我猜测这些可能是内置的一些控制字符。我将这个猜测提交给DeepSeek参考修改，结果DS给出的新一版本的代码基本就是做了一些ASCII控制字符内容的处理，不过这些内容显然不是控制字符。</p>
+<p>再次审阅原本的内容，我发现有些行末的换行符/分段符并不是紧贴着正文之后的，离正文之间还有一整段的空白。于是我试着给中间的这段空白改一下文字颜色，于是顺利的，这段乱码现出了原型。</p>
+<p>所以显然这可能是某种网页转存Word的时候出现的字符，或者是某种隐藏的水印。</p>
+<p>那接下来思路就很顺利了，用正则匹配一下这些乱码就行了。很明显可以看到这些乱码基本都是在每一段的最末尾，两两为一组，间以空格。不过考虑到部分位置并不总是两两一组所以并没有将这个特征纳入匹配的范围，初始的匹配正则如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">([^\x00-\x7F])([\x20-\x7E]&#123;4,&#125;)$</span><br></pre></td></tr></table></figure>
+<p>前段先匹配中文字符（包括汉字和中文标点符号）然后如果后面有长段（4个以上）的数字英文和符号的混合体，就匹配上。</p>
+<p>不过很显然这样会有几种情况会被错误的匹配到：</p>
+<ol>
+<li>如果末尾没有中文句号，那么类似英文混合的作者名、交流群的群号一类的都会被匹配</li>
+<li>末尾或者独立成行的网站链接也会被匹配</li>
+</ol>
+<p>考虑到有用的网站链接并不多这里只能无奈误伤，因为实际如果网站链接出现在末尾，后面也是有可能有乱码的，实际去处理判断乱码从哪里开始并不十分容易（毕竟有些网站的链接采用了一些哈希串也是乱码）。</p>
+<p>如果是作者名和群号的话，我简单的设计了一个规则，让原本没有受到这种乱码影响的文章不会被影响：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 删除行末乱码（至少4个ASCII字符，且包含特殊字符）</span></span><br><span class="line">   <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">       <span class="comment"># 匹配行末乱码（前面有非ASCII字符，后面是至少4个可打印ASCII字符）</span></span><br><span class="line">       match = re.search(<span class="string">r&#x27;([^\x00-\x7F])([\x20-\x7E]&#123;4,&#125;)$&#x27;</span>, line)</span><br><span class="line">       <span class="keyword">if</span> match:</span><br><span class="line">           prefix, junk = match.groups()</span><br><span class="line">           <span class="comment"># 检查是否只包含英文/数字/空格</span></span><br><span class="line">           <span class="keyword">if</span> <span class="keyword">not</span> re.fullmatch(<span class="string">r&#x27;[\sA-Za-z0-9]*&#x27;</span>, junk):</span><br><span class="line">               <span class="comment"># 保留前缀字符，删除乱码部分</span></span><br><span class="line">               line = line[:match.start(<span class="number">1</span>)] + prefix</span><br><span class="line"></span><br><span class="line">       cleaned_lines.append(line)</span><br></pre></td></tr></table></figure>
+<p>这样的话如果匹配到的是纯英文/数字和空格组合的字串，会被得以保留（根据实际观察，能看到的乱码基本都含有特殊符号，会被这条规则错放过去的乱码应该不会很多）。</p>
+<p>总体上看这个匹配写的还是有点激进的，应该会误伤不少正常的内容，不过为了尽可能使得文章可读性更高且处理时尽可能高效还是可以接受的。原始版的内容我也留有备份所以不会有信息上的丢失。</p>
+<p><del>实际使用时发现误伤了一个身份证号，不是谁TM在小说里编个身份证号码啊！</del></p>
+<h4 id="doc与docx"><a href="#doc与docx" class="headerlink" title="doc与docx"></a>doc与docx</h4><p>docx应该是某种更先进的word格式。简单查阅得知docx实际上是个压缩包，用一堆xml和其他媒体文件的形式保存着格式信息。</p>
+<p>Python（Windows环境下）中对于doc的处理需要引入<code>win32com</code>模块，本质上其实是打开了一个word应用程序：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化COM库</span></span><br><span class="line">pythoncom.CoInitialize()</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 启动Word应用程序（仅用于处理.doc文件）</span></span><br><span class="line">    word_app = wc.gencache.EnsureDispatch(<span class="string">&#x27;Word.Application&#x27;</span>) <span class="keyword">if</span> <span class="built_in">any</span>(</span><br><span class="line">        f.lower().endswith(<span class="string">&#x27;.doc&#x27;</span>) <span class="keyword">for</span> f <span class="keyword">in</span> doc_files) <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> word_app:</span><br><span class="line">        word_app.Visible = <span class="literal">False</span>  <span class="comment"># 不显示Word界面</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 处理.doc文件</span></span><br><span class="line"><span class="keyword">if</span> file_ext == <span class="string">&#x27;.doc&#x27;</span>:</span><br><span class="line">    <span class="comment"># 创建临时文件保存转换结果</span></span><br><span class="line">    <span class="keyword">with</span> tempfile.NamedTemporaryFile(suffix=<span class="string">&#x27;.txt&#x27;</span>, delete=<span class="literal">False</span>) <span class="keyword">as</span> temp_file:</span><br><span class="line">        temp_path = temp_file.name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        doc = word_app.Documents.Open(doc_path)</span><br><span class="line">        doc.SaveAs(temp_path, FileFormat=<span class="number">7</span>, Encoding=<span class="number">65001</span>)  <span class="comment"># 7 = txt格式, 65001 = UTF-8编码</span></span><br><span class="line">        doc.Close(SaveChanges=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 读取转换后的内容</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(temp_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            content = f.read()</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        <span class="keyword">if</span> os.path.exists(temp_path):</span><br><span class="line">            os.unlink(temp_path)</span><br></pre></td></tr></table></figure>
+<p>至于docx的处理就显得更优雅了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 处理.docx文件</span></span><br><span class="line"><span class="keyword">elif</span> file_ext == <span class="string">&#x27;.docx&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> HAS_DOCX_SUPPORT:</span><br><span class="line">        content = extract_text_using_docx(doc_path)</span><br></pre></td></tr></table></figure>
+<p>所以日常使用中如果可以的话还是要优先考虑使用docx存储，方便日后进行处理（当然不是推荐你用docx存小说嗷，就算txt不爽的话，markdown他不香吗？）</p>
+<h4 id="媒体丢失"><a href="#媒体丢失" class="headerlink" title="媒体丢失"></a>媒体丢失</h4><p>能做出这种神人操作的人，再有什么错误都显得那么的不足为奇。</p>
+<p>批量处理那一万个文档的时候，出现了40个左右的文档处理失败，截取一段报错如下：</p>
+<blockquote>
+<p> 转换失败: “There is no item named ‘NULL’ in the archive”</p>
+</blockquote>
+<p><code>in the archive</code>显然是出现在docx的处理中，事实也证明报错的文件都是docx。根据报错应该是缺失了某种内容，但是缺失的内容的名字的NULL？这显然非常奇怪。</p>
+<p>根据报错找到一两个文件打开，发现文件有个很显著的共同点：里面有配图，并且配图都报错显示丢失。实际检查docx压缩包，发现甚至没有媒体的那个文件夹。</p>
+<p>按理说doc应该也是这种情况，对于出错的docx继续采用doc的处理方法应该就没问题。不过实际涉及文件并不多，于是我选择手动删除涉及到的图片内容。这一部分的处理并没有改动代码。</p>
+<h3 id="clear3doc-py"><a href="#clear3doc-py" class="headerlink" title="clear3doc.py"></a>clear3doc.py</h3><p>既然转换完成，那么同名的文档也没有存在的必要了。这个程序会遍历目标路径，寻找doc/docx文件，然后如果在相同目录找到了同名的txt文件那就删除这个文档。</p>
+<p>主要是和上文程序配套使用，倒是没什么需要特别说明的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LymoneLM/LymoneTest/blob/master/Tools/clear3doc.py">LymoneTest/Tools/clear3doc.py at master · LymoneLM/LymoneTest</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">delete_doc_with_txt</span>(<span class="params">folder_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;删除存在同名txt文件的doc和docx文件（包括子目录）&quot;&quot;&quot;</span></span><br><span class="line">    extensions = (<span class="string">&#x27;.doc&#x27;</span>, <span class="string">&#x27;.docx&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> root, dirs, files <span class="keyword">in</span> os.walk(folder_path):</span><br><span class="line">        <span class="keyword">for</span> filename <span class="keyword">in</span> files:</span><br><span class="line">            <span class="keyword">if</span> filename.lower().endswith(extensions):</span><br><span class="line">                file_path = os.path.join(root, filename)</span><br><span class="line">                name = os.path.splitext(filename)[<span class="number">0</span>]</span><br><span class="line">                txt_path = os.path.join(root, <span class="string">f&quot;<span class="subst">&#123;name&#125;</span>.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> os.path.exists(txt_path):</span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        os.remove(file_path)</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;已删除: <span class="subst">&#123;file_path&#125;</span> (存在同名txt文件)&quot;</span>)</span><br><span class="line">                    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;删除失败: <span class="subst">&#123;file_path&#125;</span> - <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="pdf2txt-py"><a href="#pdf2txt-py" class="headerlink" title="pdf2txt.py"></a>pdf2txt.py</h3><p>白菜开会，群英荟萃</p>
+<p>里面甚至有PDF格式的文件，甚至只是某篇长文的其中几节，简直了！ </p>
+<p>话说夸克网盘为什么会有个PDF转txt的功能啊，还加到我右键菜单了，结果登录上才告诉我收费，而且需要上传才能处理，垃圾！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/LymoneLM/LymoneTest/blob/master/Tools/pdf2txt.py">LymoneTest/Tools/pdf2txt.py at master · LymoneLM/LymoneTest</a></p>
+<h2 id="啥也不是，散会！"><a href="#啥也不是，散会！" class="headerlink" title="啥也不是，散会！"></a>啥也不是，散会！</h2><ol>
+<li>不要用Word存TM纯文本啊！</li>
+<li>docx确实比doc先进</li>
+<li>睡前别配任何东西</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+		
+			<div>
+				<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+			</div>
+		
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Lymone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.lymone.cc/p/4e656f3d.html" title="reader3书柜，word转txt，正则清理乱码">http://www.lymone.cc/p/4e656f3d.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://space.bilibili.com/156896909">
+            <span class="icon">
+              <i class="fa-brands fa-bilibili"></i>
+            </span>
+
+            <span class="label">Bilibili</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://jq.qq.com/?_wv=1027&k=mWmrw42s">
+            <span class="icon">
+              <i class="fab fa-qq"></i>
+            </span>
+
+            <span class="label">QQgroup</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://codeforces.com/profile/Lymone">
+            <span class="icon">
+              <i class="fa-solid fa-code"></i>
+            </span>
+
+            <span class="label">CodeForces</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="https://ac.nowcoder.com/acm/contest/profile/972188827">
+            <span class="icon">
+              <i class="fa-solid fa-circle-nodes"></i>
+            </span>
+
+            <span class="label">NowCoder</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+	  
+ 
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+              <a href="/tags/NAS/" rel="tag"><i class="fa fa-tag"></i> NAS</a>
+              <a href="/tags/%E6%AD%A3%E5%88%99/" rel="tag"><i class="fa fa-tag"></i> 正则</a>
+              <a href="/tags/%E5%8A%9E%E5%85%AC/" rel="tag"><i class="fa fa-tag"></i> 办公</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/2716373b.html" rel="prev" title="中国矿业大学Python编程实践">
+      <i class="fa fa-chevron-left"></i> 中国矿业大学Python编程实践
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E4%B9%A6%E6%9F%9C%E5%A5%BD%E5%91%A2"><span class="nav-text">什么书柜好呢</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Calibre-Web"><span class="nav-text">Calibre-Web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader3"><span class="nav-text">Reader3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA"><span class="nav-text">搭建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-text">小技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-text">优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E8%B6%B3"><span class="nav-text">不足</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#anyway"><span class="nav-text">anyway</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E6%94%B6%E8%97%8F"><span class="nav-text">导入收藏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#word2txt-py"><span class="nav-text">word2txt.py</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%B1%E7%A0%81%E5%A4%84%E7%90%86"><span class="nav-text">乱码处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#doc%E4%B8%8Edocx"><span class="nav-text">doc与docx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AA%92%E4%BD%93%E4%B8%A2%E5%A4%B1"><span class="nav-text">媒体丢失</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clear3doc-py"><span class="nav-text">clear3doc.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pdf2txt-py"><span class="nav-text">pdf2txt.py</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%A5%E4%B9%9F%E4%B8%8D%E6%98%AF%EF%BC%8C%E6%95%A3%E4%BC%9A%EF%BC%81"><span class="nav-text">啥也不是，散会！</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lymone"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lymone</p>
+  <div class="site-description" itemprop="description">什么都学也是一种全栈</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/LymoneLM" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;LymoneLM" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://jq.qq.com/?_wv=1027&k=mWmrw42s" title="QQgroup → https:&#x2F;&#x2F;jq.qq.com&#x2F;?_wv&#x3D;1027&amp;k&#x3D;mWmrw42s" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i>QQgroup</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codeforces.com/profile/Lymone" title="CodeForces → https:&#x2F;&#x2F;codeforces.com&#x2F;profile&#x2F;Lymone" rel="noopener" target="_blank"><i class="fa-solid fa-code fa-fw"></i>CodeForces</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://ac.nowcoder.com/acm/contest/profile/972188827" title="NowCoder → https:&#x2F;&#x2F;ac.nowcoder.com&#x2F;acm&#x2F;contest&#x2F;profile&#x2F;972188827" rel="noopener" target="_blank"><i class="fa-solid fa-circle-nodes fa-fw"></i>NowCoder</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/156896909" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;156896909" rel="noopener" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lymone@foxmail.com" title="E-Mail → mailto:lymone@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">鲁ICP备2025169464号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2022 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lymone</span>
+	</div>
+	
+
+<div class="count">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">66k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:42</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <!--<span id="busuanzi_container_site_pv"><br/>总访问量<span id="busuanzi_value_site_pv"></span>次</span>-->
+   <!-- <span class="post-meta-divider">|</span>-->
+   <!-- <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv"></span>人</span>-->
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+$(document).ready(function() {
+
+    var int = setInterval(fixCount, 50);  // 50ms周期检测函数
+    var countOffset = 20000;  // 初始化首次数据
+
+    function fixCount() {            
+       if (document.getElementById("busuanzi_container_site_pv").style.display != "none")
+        {
+            $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + countOffset); 
+            clearInterval(int);
+        }                  
+        if ($("#busuanzi_container_site_pv").css("display") != "none")
+        {
+            $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + countOffset); // 加上初始数据 
+            clearInterval(int); // 停止检测
+        }  
+    }
+       	
+});
+</script> 
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa-regular fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
